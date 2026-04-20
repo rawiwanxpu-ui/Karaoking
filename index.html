@@ -447,6 +447,7 @@ let langFilter='all', histFilterSinger='all';
 let audioCtx=null, analyser=null, mic=null, pitchTimer=null, singerTimer=null;
 let elapsedSec=0, goodPitchCount=0, totalPitchCount=0, isSinging=false;
 let mediaRecorder=null, audioChunks=[], recordedBlob=null, withRecording=false;
+let currentHistoryId=null;
 // edit modal state
 let editNewPhotoData=null; // {base64, filename, mimeType} or null
 let editNewPhotoUrl=null;  // string URL or null
@@ -962,6 +963,8 @@ function downloadRecording() {
   URL.revokeObjectURL(a.href);
   showToast('⬇️ ดาวน์โหลดแล้ว');
 }
+
+async function requestAIFeedback() {
   const btn = document.getElementById('btnAI');
   btn.disabled = true;
   btn.textContent = '⏳ กำลังส่ง...';
@@ -1060,6 +1063,14 @@ async function analyzeVoiceWithClaude(pitchPct, duration) {
       .replace(/\n\n/g,'</p><p>')
       .replace(/\n/g,'<br>');
     aiFeedbackEl.innerHTML = `<p>${html}</p>`;
+
+    // บันทึก feedback กลับเข้า sheet ถ้ามี historyId แล้ว
+    if (currentHistoryId) {
+      // ดึงคะแนน AI จาก feedback (หาตัวเลข X/10)
+      const scoreMatch = data.feedback.match(/(\d+)\s*\/\s*10/g);
+      const aiScore = scoreMatch ? scoreMatch.map(s=>parseInt(s)).filter(n=>n<=10).join(',') : '';
+      apiGet({ action:'updateHistoryAI', id:currentHistoryId, aiScore, aiFeedback: data.feedback });
+    }
   } else {
     aiFeedbackEl.innerHTML = `<div style="color:var(--red);font-size:13px;">❌ ${data.error||'ไม่สามารถรับ feedback ได้'}</div>`;
   }
@@ -1069,7 +1080,13 @@ async function saveResult(){
   const pct=totalPitchCount?Math.round((goodPitchCount/totalPitchCount)*100):0;
   const score=Math.round(pct*0.7+Math.min(elapsedSec/2,30));
   const r=await apiGet({action:'addHistory',singerId:currentSinger.id,songId:currentSong.id,score,pitch:pct,duration:elapsedSec});
-  if(r.success){ showToast('บันทึกคะแนนแล้ว ✓'); closeModal(); loadBoard(); loadHistory(); loadSingerStats(currentSinger.id); }
+  if(r.success){
+    currentHistoryId = r.id;
+    showToast('บันทึกคะแนนแล้ว ✓');
+    loadBoard(); loadHistory(); loadSingerStats(currentSinger.id);
+    // ถ้าไม่มีการอัดเสียง ปิด modal เลย ถ้าอัดไว้ให้ค้างไว้เพื่อกด AI ได้
+    if (!withRecording) closeModal();
+  }
 }
 
 // ---- BOARD ----
@@ -1085,7 +1102,7 @@ async function loadBoard(){
       ${photoHtml}
       <div class="board-info">
         <div class="board-name">${d.name}</div>
-        <div class="board-detail">${d.totalSongs} เพลง · Pitch เฉลี่ย ${d.avgPitch}% · สูงสุด ${d.bestScore} pts</div>
+        <div class="board-detail">${d.totalSongs} เพลง · Pitch เฉลี่ย ${d.avgPitch}% · สูงสุด ${d.bestScore} pts${d.totalAI?` · 🤖 ${d.totalAI} ครั้ง`:''}</div>
       </div>
       <div style="text-align:right;">
         <div class="board-score-val">${d.avgScore}</div>
@@ -1125,17 +1142,20 @@ function renderHistory(){
     const photoDiv=s&&s.photoUrl
       ?`<div class="hist-photo"><img src="${s.photoUrl}" onerror="this.parentElement.innerHTML='${s?s.emoji||'🎤':'🎤'}'"></div>`
       :`<div class="hist-photo" style="font-size:18px;">${s?s.emoji||'🎤':'🎤'}</div>`;
-    return `<div class="history-item">
-      <div class="hist-grade" style="color:${colorOf(h.score)}">${gradeOf(h.score)}</div>
-      ${photoDiv}
-      <div class="hist-info">
-        <div class="hist-song">${h.songTitle||'—'}</div>
-        <div class="hist-detail">${s?s.name:'—'} · ${h.artist||''} · ${ds}</div>
+    return `<div class="history-item" style="flex-direction:column;align-items:stretch;gap:8px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="hist-grade" style="color:${colorOf(h.score)}">${gradeOf(h.score)}</div>
+        ${photoDiv}
+        <div class="hist-info">
+          <div class="hist-song">${h.songTitle||'—'}</div>
+          <div class="hist-detail">${s?s.name:'—'} · ${h.artist||''} · ${ds}</div>
+        </div>
+        <div>
+          <div class="hist-score" style="color:${colorOf(h.score)}">${h.score}</div>
+          <div class="hist-pitch">Pitch ${h.pitchAccuracy}%${h.aiCount>0?` · 🤖${h.aiCount}`:''}</div>
+        </div>
       </div>
-      <div>
-        <div class="hist-score" style="color:${colorOf(h.score)}">${h.score}</div>
-        <div class="hist-pitch">Pitch ${h.pitchAccuracy}%</div>
-      </div>
+      ${h.aiFeedback ? `<div style="font-size:11px;color:var(--text2);background:var(--bg3);border-radius:8px;padding:8px 10px;line-height:1.5;border-left:2px solid var(--purple);">🤖 ${h.aiScore?'<strong>'+h.aiScore+'</strong> · ':''}${h.aiFeedback.slice(0,150)}${h.aiFeedback.length>150?'…':''}</div>` : ''}
     </div>`;
   }).join(''):'<div style="text-align:center;padding:40px;color:var(--text3)">ยังไม่มีประวัติ</div>';
 }
