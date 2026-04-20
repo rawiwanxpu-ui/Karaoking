@@ -232,18 +232,17 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- SINGERS PAGE -->
 <div class="page active" id="page-singers">
   <div class="sec-title">นักร้อง</div>
-  <div class="sec-sub">กดเลือกนักร้องก่อนร้องเพลง กด ✏ เพื่อแก้ไขรูปและชื่อ</div>
+  <div class="sec-sub">กดเลือกนักร้องก่อนร้องเพลง · กด ✏ เพื่อแก้ไขรูปและชื่อ · กด ✕ เพื่อลบ</div>
   <div class="warn-bar" id="singerWarn">⚠ กรุณาเลือกนักร้องก่อน แล้วไปหน้า "เพลง"</div>
   <div class="singer-grid" id="singerGrid"><div class="loading">กำลังโหลด...</div></div>
   <div class="add-form">
     <div class="form-title">เพิ่มนักร้องใหม่</div>
-    <div class="form-row">
+    <div class="form-row full" style="margin-bottom:10px;">
       <input class="form-input" id="newSingerName" placeholder="ชื่อนักร้อง *">
-      <input class="form-input" id="newSingerEmoji" placeholder="Emoji (เช่น 🎤 🌟 👑)">
     </div>
     <div class="photo-upload-area" id="newPhotoArea">
       <img id="newPhotoPreview" class="photo-preview" src="" alt="" style="display:none;">
-      <div class="photo-upload-label" id="newPhotoLabel">📷 คลิกเพื่ออัปโหลดรูปโปรไฟล์</div>
+      <div class="photo-upload-label" id="newPhotoLabel">📷 คลิกเพื่ออัปโหลดรูปโปรไฟล์ (ไม่บังคับ)</div>
       <input type="file" class="photo-upload-input" id="newPhotoFile" accept="image/*" onchange="previewNewPhoto(event)">
     </div>
     <div class="photo-url-or">— หรือใส่ลิงก์รูปภาพ URL —</div>
@@ -326,9 +325,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
         <div class="upload-progress-bar" id="editUploadBar"></div>
       </div>
     </div>
-    <div class="form-row" style="margin-bottom:10px;">
+    <div class="form-row full" style="margin-bottom:10px;">
       <input class="form-input" id="editSingerName" placeholder="ชื่อนักร้อง">
-      <input class="form-input" id="editSingerEmoji" placeholder="Emoji">
     </div>
     <div style="display:flex;gap:10px;margin-top:6px;">
       <button class="btn-add" style="flex:1;" onclick="saveEditSinger()">💾 บันทึก</button>
@@ -425,13 +423,21 @@ async function apiGet(params) {
   try {
     const r = await fetch(SCRIPT_URL + '?' + new URLSearchParams(params));
     return await r.json();
-  } catch(e) { showToast('เชื่อมต่อล้มเหลว'); return {}; }
+  } catch(e) { showToast('เชื่อมต่อล้มเหลว: '+e.message); return {}; }
 }
+
 async function apiPost(body) {
   try {
-    const r = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify(body) });
+    // Apps Script ต้องรับ form-urlencoded ถึงจะผ่าน CORS redirect
+    const form = new URLSearchParams();
+    Object.keys(body).forEach(k => form.append(k, body[k]));
+    const r = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: form.toString()
+    });
     return await r.json();
-  } catch(e) { showToast('เชื่อมต่อล้มเหลว'); return {}; }
+  } catch(e) { showToast('เชื่อมต่อล้มเหลว: '+e.message); return {}; }
 }
 
 // ---- INIT ----
@@ -453,11 +459,26 @@ function singerPhotoHTML(s, size=64, cls='singer-photo') {
 }
 
 function fileToBase64(file) {
-  return new Promise((res,rej) => {
-    const r = new FileReader();
-    r.onload = e => res(e.target.result.split(',')[1]);
-    r.onerror = rej;
-    r.readAsDataURL(file);
+  return new Promise((res, rej) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      // ย่อรูปให้ไม่เกิน 400x400 ก่อนส่ง ลด payload
+      const MAX = 400;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      res(dataUrl.split(',')[1]);
+    };
+    img.onerror = rej;
+    img.src = url;
   });
 }
 
@@ -480,7 +501,6 @@ function previewNewPhotoUrl(url) {
 async function addSinger() {
   const name = document.getElementById('newSingerName').value.trim();
   if (!name) { showToast('กรุณาใส่ชื่อนักร้อง'); return; }
-  const emoji  = document.getElementById('newSingerEmoji').value.trim() || '🎤';
   const urlVal = document.getElementById('newPhotoUrl').value.trim();
   const fileEl = document.getElementById('newPhotoFile');
   let photoUrl = '', driveFileId = '';
@@ -488,18 +508,18 @@ async function addSinger() {
   showToast('⏳ กำลังบันทึก...');
   if (fileEl.files[0]) {
     const base64 = await fileToBase64(fileEl.files[0]);
-    const res = await apiPost({ action:'uploadPhoto', base64, filename: fileEl.files[0].name, mimeType: fileEl.files[0].type });
+    const res = await apiPost({ action:'uploadPhoto', base64, filename: fileEl.files[0].name.replace(/\.[^.]+$/,'.jpg'), mimeType: 'image/jpeg' });
     if (res.success) { photoUrl = res.photoUrl; driveFileId = res.fileId; }
+    else showToast('อัปโหลดรูปไม่สำเร็จ: '+(res.error||''));
   } else if (urlVal) {
     photoUrl = urlVal;
   }
 
-  const r = await apiGet({ action:'addSinger', name, emoji, photoUrl, driveFileId });
+  const r = await apiGet({ action:'addSinger', name, emoji:'🎤', photoUrl, driveFileId });
   if (r.success) {
     singers = await apiGet({action:'getSingers'}) || [];
     renderSingers();
     document.getElementById('newSingerName').value='';
-    document.getElementById('newSingerEmoji').value='';
     document.getElementById('newPhotoUrl').value='';
     document.getElementById('newPhotoPreview').style.display='none';
     document.getElementById('newPhotoLabel').style.display='block';
@@ -559,11 +579,9 @@ function openEditModal(id) {
   document.getElementById('editSingerId').value = s.id;
   document.getElementById('editOldFileId').value = s.driveFileId||'';
   document.getElementById('editSingerName').value = s.name;
-  document.getElementById('editSingerEmoji').value = s.emoji||'🎤';
-  // preview
   const av = document.getElementById('editAvatarPreview');
-  if (s.photoUrl) av.innerHTML=`<img src="${s.photoUrl}" onerror="this.parentElement.innerHTML='${s.emoji||'🎤'}'">`;
-  else av.innerHTML = s.emoji||'🎤';
+  if (s.photoUrl) av.innerHTML=`<img src="${s.photoUrl}" onerror="this.parentElement.innerHTML='🎤'">`;
+  else av.innerHTML = '🎤';
   document.getElementById('editUploadProgress').style.display='none';
   document.getElementById('editModal').classList.remove('hidden');
 }
@@ -605,7 +623,6 @@ function removeEditPhoto() {
 async function saveEditSinger() {
   const id       = document.getElementById('editSingerId').value;
   const name     = document.getElementById('editSingerName').value.trim();
-  const emoji    = document.getElementById('editSingerEmoji').value.trim() || '🎤';
   const oldFileId= document.getElementById('editOldFileId').value;
   const s        = singers.find(x=>x.id===id);
 
@@ -615,26 +632,23 @@ async function saveEditSinger() {
 
   if (editPhotoChanged) {
     if (editNewPhotoData) {
-      // อัปโหลดรูปใหม่
       const prog = document.getElementById('editUploadProgress');
       const bar  = document.getElementById('editUploadBar');
       prog.style.display='block'; bar.style.width='30%';
       showToast('⏳ กำลังอัปโหลดรูป...');
       const base64 = await fileToBase64(editNewPhotoData.file);
       bar.style.width='70%';
-      const res = await apiPost({ action:'uploadPhoto', base64, filename:editNewPhotoData.filename, mimeType:editNewPhotoData.mimeType, oldFileId });
+      const res = await apiPost({ action:'uploadPhoto', base64, filename: editNewPhotoData.filename.replace(/\.[^.]+$/,'.jpg'), mimeType:'image/jpeg', oldFileId });
       bar.style.width='100%';
       if (res.success) { photoUrl=res.photoUrl; driveFileId=res.fileId; delOldFile=''; }
     } else if (editNewPhotoUrl) {
-      // ใส่ URL ใหม่ + ลบ Drive เก่า
       photoUrl = editNewPhotoUrl; driveFileId=''; delOldFile=oldFileId;
     } else {
-      // ลบรูป
       photoUrl=''; driveFileId=''; delOldFile=oldFileId;
     }
   }
 
-  await apiGet({ action:'updateSinger', id, name, emoji, photoUrl, driveFileId, oldFileId: delOldFile });
+  await apiGet({ action:'updateSinger', id, name, emoji:'🎤', photoUrl, driveFileId, oldFileId: delOldFile });
   singers = await apiGet({action:'getSingers'}) || [];
   renderSingers();
   closeEditModal();
