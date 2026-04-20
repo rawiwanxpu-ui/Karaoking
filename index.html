@@ -400,14 +400,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       </div>
     </div>
     <div class="modal-btns">
-      <!-- เลือกโหมดก่อนร้อง -->
       <div id="startChoiceRow" style="display:flex;gap:8px;width:100%;">
-        <button class="btn-start" id="btnStartNormal" onclick="startSinging(false)" style="flex:1;font-size:13px;">🎤 ร้องเลย</button>
-        <button id="btnStartRecord" onclick="startSinging(true)" style="flex:1;padding:13px;border-radius:12px;background:rgba(155,93,229,0.15);border:1.5px solid var(--purple);color:var(--purple);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);">⏺ อัดเสียง + AI</button>
+        <button class="btn-start" id="btnStartNormal" onclick="startSinging(false)" style="flex:1;">🎤 ร้องเลย</button>
+        <button id="btnStartRecord" onclick="startSinging(true)" style="flex:1;padding:13px;border-radius:12px;background:rgba(0,212,255,0.1);border:1.5px solid var(--cyan);color:var(--cyan);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);">⏺ อัดเสียง</button>
+        <button class="btn-cancel" onclick="closeModal()" style="flex:0;">✕</button>
       </div>
       <button class="btn-stop" id="btnStop" onclick="stopSinging()">⏹ หยุด</button>
       <button class="btn-finish" id="btnFinish" onclick="showResult()">✓ จบเพลง</button>
-      <button class="btn-cancel" onclick="closeModal()">✕</button>
+      <button class="btn-cancel" id="btnCancelSing" onclick="closeModal()" style="display:none;">✕</button>
     </div>
     <div class="result-overlay" id="resultOverlay">
       <div class="result-grade" id="resultGrade">🎤</div>
@@ -418,14 +418,19 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
         <div class="result-stat"><div class="result-stat-val" id="resDur" style="color:var(--purple)">0 วิ</div><div class="result-stat-lbl">เวลา</div></div>
       </div>
       <!-- เล่นเสียงที่อัดไว้ (แสดงเฉพาะเมื่ออัด) -->
-      <div id="playbackSection" style="display:none;margin-top:12px;background:var(--bg3);border-radius:12px;padding:12px;width:100%;">
-        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">🎧 ฟังเสียงที่อัดไว้</div>
-        <audio id="playbackAudio" controls style="width:100%;height:36px;"></audio>
-        <button onclick="downloadRecording()" style="margin-top:8px;width:100%;padding:9px;border-radius:10px;background:rgba(0,212,255,0.1);border:1px solid var(--cyan);color:var(--cyan);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);">⬇️ ดาวน์โหลดเสียง</button>
+      <div id="playbackSection" style="display:none;margin-top:12px;background:var(--bg3);border-radius:14px;padding:14px;width:100%;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:10px;letter-spacing:0.5px;">🎙️ เสียงที่อัดไว้</div>
+        <audio id="playbackAudio" controls style="width:100%;height:36px;margin-bottom:10px;"></audio>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <button onclick="document.getElementById('playbackAudio').play()" style="padding:9px 6px;border-radius:10px;background:rgba(0,230,118,0.1);border:1px solid var(--green);color:var(--green);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font);">▶ เปิดฟัง</button>
+          <button onclick="downloadRecording()" style="padding:9px 6px;border-radius:10px;background:rgba(0,212,255,0.1);border:1px solid var(--cyan);color:var(--cyan);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font);">⬇ ดาวน์โหลด</button>
+          <button onclick="requestAIFeedback()" id="btnAI" style="padding:9px 6px;border-radius:10px;background:rgba(155,93,229,0.15);border:1px solid var(--purple);color:var(--purple);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font);">🤖 ส่ง AI</button>
+        </div>
       </div>
       <div style="display:flex;gap:8px;margin-top:12px;width:100%;">
-        <button class="btn-save" onclick="saveResult()" style="flex:1;">💾 บันทึก</button>
-        <button onclick="requestAIFeedback()" id="btnAI" style="display:none;flex:1;padding:13px;border-radius:12px;background:rgba(155,93,229,0.15);border:1px solid var(--purple);color:var(--purple);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);">🤖 ส่ง AI ประเมิน</button>
+        <button class="btn-save" onclick="saveResult()" style="flex:1;">💾 บันทึกคะแนน</button>
+        <button onclick="resetModal()" style="flex:1;padding:13px;border-radius:12px;background:rgba(0,230,118,0.1);border:1px solid var(--green);color:var(--green);font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font);">🔄 ร้องใหม่</button>
+        <button class="btn-cancel" onclick="closeModal()" style="padding:13px 16px;">✕</button>
       </div>
       <div id="aiLoading" style="display:none;align-items:center;gap:10px;margin-top:12px;color:var(--text2);font-size:13px;">
         <div style="width:18px;height:18px;border:2px solid var(--purple);border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0;"></div>
@@ -817,14 +822,14 @@ function resetModal() {
   document.getElementById('aiFeedback').innerHTML='';
   document.getElementById('aiFeedback').style.display='none';
   document.getElementById('aiLoading').style.display='none';
-  document.getElementById('btnAI').style.display='none';
   document.getElementById('btnAI').disabled=false;
-  document.getElementById('btnAI').textContent='🤖 ส่ง AI ประเมิน';
+  document.getElementById('btnAI').textContent='🤖 ส่ง AI';
   document.getElementById('playbackSection').style.display='none';
   document.getElementById('playbackAudio').src='';
   document.getElementById('startChoiceRow').style.display='flex';
   document.getElementById('btnStop').style.display='none';
   document.getElementById('btnFinish').style.display='none';
+  document.getElementById('btnCancelSing').style.display='none';
   audioChunks=[]; recordedBlob=null; withRecording=false;
   setWaveIdle(true);
 }
@@ -882,6 +887,7 @@ async function startSinging(withRec=false) {
     document.getElementById('startChoiceRow').style.display='none';
     document.getElementById('btnStop').style.display='block';
     document.getElementById('btnFinish').style.display='block';
+    document.getElementById('btnCancelSing').style.display='block';
 
     singerTimer=setInterval(()=>{
       elapsedSec++;
@@ -929,6 +935,7 @@ function stopSinging(){
   stopAudio();
   document.getElementById('btnStop').style.display='none';
   document.getElementById('btnFinish').style.display='none';
+  document.getElementById('btnCancelSing').style.display='none';
   document.getElementById('startChoiceRow').style.display='flex';
 }
 function setWaveIdle(idle){ document.querySelectorAll('.wave-bar').forEach(b=>idle?b.classList.add('idle'):b.classList.remove('idle')); }
