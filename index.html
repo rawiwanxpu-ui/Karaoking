@@ -6,61 +6,46 @@
 <title>🎤 KaraoKing</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0a0a0f;
-  --bg2: #12121a;
-  --bg3: #1a1a26;
-  --card: #16161f;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.14);
-  --gold: #f5c842;
-  --gold2: #e0a800;
-  --pink: #ff4da6;
-  --purple: #9b5de5;
-  --cyan: #00d4ff;
-  --green: #00e676;
-  --red: #ff3d57;
-  --text: #f0f0f8;
-  --text2: #8888aa;
-  --text3: #4a4a6a;
-  --font-display: 'Bebas Neue', sans-serif;
-  --font: 'Noto Sans Thai', sans-serif;
+:root{
+  --bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a26;--card:#16161f;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --gold:#f5c842;--gold2:#e0a800;--pink:#ff4da6;--purple:#9b5de5;
+  --cyan:#00d4ff;--green:#00e676;--red:#ff3d57;
+  --text:#f0f0f8;--text2:#8888aa;--text3:#4a4a6a;
+  --font-d:'Bebas Neue',sans-serif;--font:'Noto Sans Thai',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-
-/* bg stars */
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(155,93,229,0.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(255,77,166,0.06) 0%,transparent 50%);pointer-events:none;z-index:0;}
 
-/* TOPBAR */
 .topbar{position:sticky;top:0;z-index:200;background:rgba(10,10,15,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:var(--font-display);font-size:26px;letter-spacing:2px;background:linear-gradient(135deg,var(--gold),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.logo span{font-size:20px;}
+.logo{font-family:var(--font-d);font-size:26px;letter-spacing:2px;background:linear-gradient(135deg,var(--gold),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .nav-tabs{display:flex;gap:2px;}
-.nav-tab{padding:6px 14px;border-radius:8px;font-size:13px;color:var(--text2);cursor:pointer;transition:all .2s;border:none;background:transparent;}
+.nav-tab{padding:6px 14px;border-radius:8px;font-size:13px;color:var(--text2);cursor:pointer;transition:all .2s;border:none;background:transparent;font-family:var(--font);}
 .nav-tab:hover{color:var(--text);background:var(--bg3);}
 .nav-tab.active{color:var(--gold);background:rgba(245,200,66,0.1);}
 
-/* PAGES */
 .page{display:none;padding:20px;max-width:900px;margin:0 auto;position:relative;z-index:1;}
 .page.active{display:block;}
-
-/* SECTION TITLE */
-.sec-title{font-family:var(--font-display);font-size:28px;letter-spacing:2px;color:var(--text);margin-bottom:4px;}
+.sec-title{font-family:var(--font-d);font-size:28px;letter-spacing:2px;margin-bottom:4px;}
 .sec-sub{font-size:13px;color:var(--text2);margin-bottom:20px;}
 
 /* SINGER CARDS */
-.singer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:24px;}
+.singer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:24px;}
 .singer-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .25s;position:relative;}
 .singer-card:hover{border-color:var(--border2);transform:translateY(-2px);}
 .singer-card.selected{border-color:var(--gold);background:rgba(245,200,66,0.06);}
 .singer-card.selected::after{content:'✓';position:absolute;top:8px;right:10px;color:var(--gold);font-size:14px;font-weight:700;}
-.singer-avatar{width:56px;height:56px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:26px;background:var(--bg3);border:2px solid var(--border2);}
-.singer-name{font-size:13px;font-weight:500;color:var(--text);}
+.singer-photo{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;object-fit:cover;border:2px solid var(--border2);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden;}
+.singer-photo img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.singer-name{font-size:13px;font-weight:500;}
 .singer-stats{font-size:11px;color:var(--text3);margin-top:4px;}
+.singer-edit-btn{position:absolute;top:7px;left:9px;width:22px;height:22px;border-radius:6px;background:var(--bg3);border:1px solid var(--border2);color:var(--text3);font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;z-index:2;}
+.singer-edit-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+.singer-del-btn{position:absolute;top:7px;right:9px;width:22px;height:22px;border-radius:6px;background:var(--bg3);border:1px solid var(--border2);color:var(--text3);font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;z-index:2;}
+.singer-del-btn:hover{border-color:var(--red);color:var(--red);}
 .singer-add{border:1.5px dashed var(--border2);background:transparent;cursor:pointer;}
 .singer-add:hover{border-color:var(--gold);background:rgba(245,200,66,0.04);}
-.singer-add .singer-avatar{background:transparent;border-color:var(--border2);color:var(--text3);font-size:22px;}
 
 /* SONG LIST */
 .song-search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:var(--font);font-size:14px;margin-bottom:12px;outline:none;transition:border-color .2s;}
@@ -70,17 +55,16 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .filter-btn{padding:5px 14px;border-radius:20px;font-size:12px;font-family:var(--font);border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;}
 .filter-btn.active{background:rgba(155,93,229,0.15);border-color:var(--purple);color:var(--purple);}
 .song-list{display:flex;flex-direction:column;gap:8px;}
-.song-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;transition:all .2s;cursor:pointer;}
+.song-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;transition:all .2s;}
 .song-item:hover{border-color:var(--border2);background:var(--bg3);}
-.song-num{font-family:var(--font-display);font-size:20px;color:var(--text3);min-width:28px;}
+.song-num{font-family:var(--font-d);font-size:20px;color:var(--text3);min-width:28px;}
 .song-info{flex:1;min-width:0;}
-.song-title{font-size:14px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.song-title{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .song-artist{font-size:12px;color:var(--text2);margin-top:2px;}
 .song-badges{display:flex;gap:6px;margin-top:4px;}
 .badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500;}
 .badge-lang{background:rgba(0,212,255,0.12);color:var(--cyan);}
 .badge-key{background:rgba(155,93,229,0.12);color:var(--purple);}
-.badge-count{background:rgba(245,200,66,0.12);color:var(--gold);}
 .song-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;}
 .btn-yt{padding:7px 14px;border-radius:10px;background:rgba(255,0,0,0.15);border:1px solid rgba(255,0,0,0.3);color:#ff4444;font-size:12px;font-weight:500;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap;}
 .btn-yt:hover{background:rgba(255,0,0,0.25);}
@@ -89,7 +73,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .btn-del{width:28px;height:28px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text3);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
 .btn-del:hover{border-color:var(--red);color:var(--red);}
 
-/* ADD FORM */
+/* FORMS */
 .add-form{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;}
 .form-title{font-size:14px;font-weight:500;margin-bottom:14px;color:var(--text2);}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
@@ -100,63 +84,82 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .btn-add{padding:9px 20px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--pink));border:none;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);transition:all .2s;}
 .btn-add:hover{opacity:0.85;}
 
-/* SINGING MODAL */
+/* PHOTO UPLOAD AREA */
+.photo-upload-area{border:2px dashed var(--border2);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:10px;position:relative;}
+.photo-upload-area:hover{border-color:var(--purple);background:rgba(155,93,229,0.05);}
+.photo-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 8px;display:block;border:2px solid var(--border2);}
+.photo-upload-label{font-size:12px;color:var(--text2);}
+.photo-upload-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-url-or{text-align:center;font-size:11px;color:var(--text3);margin:6px 0;}
+
+/* MODAL BACKDROP */
 .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;}
 .modal-backdrop.hidden{display:none;}
-.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:24px;padding:28px;width:100%;max-width:560px;position:relative;}
-.modal-singer{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
-.modal-avatar{width:44px;height:44px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid var(--gold);flex-shrink:0;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:24px;padding:28px;width:100%;max-width:560px;position:relative;max-height:90vh;overflow-y:auto;}
+
+/* EDIT SINGER MODAL */
+.edit-modal{max-width:420px;}
+.edit-photo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:18px;}
+.edit-avatar{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--border2);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:40px;overflow:hidden;margin-bottom:10px;}
+.edit-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.edit-photo-btns{display:flex;gap:8px;}
+.btn-photo-upload{padding:7px 14px;border-radius:10px;background:rgba(155,93,229,0.15);border:1px solid var(--purple);color:var(--purple);font-size:12px;cursor:pointer;font-family:var(--font);position:relative;overflow:hidden;}
+.btn-photo-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0;}
+.btn-photo-url{padding:7px 14px;border-radius:10px;background:rgba(0,212,255,0.1);border:1px solid var(--cyan);color:var(--cyan);font-size:12px;cursor:pointer;font-family:var(--font);}
+.btn-photo-del{padding:7px 14px;border-radius:10px;background:rgba(255,61,87,0.1);border:1px solid var(--red);color:var(--red);font-size:12px;cursor:pointer;font-family:var(--font);}
+.upload-progress{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:8px;display:none;}
+.upload-progress-bar{height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));width:0%;transition:width .3s;}
+
+/* SINGING MODAL */
+.modal-singer-row{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.modal-avatar{width:44px;height:44px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid var(--gold);flex-shrink:0;overflow:hidden;}
+.modal-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .modal-singer-name{font-size:16px;font-weight:500;}
-.modal-song{font-size:13px;color:var(--text2);}
-.modal-song strong{color:var(--gold);}
+.modal-song-name{font-size:13px;color:var(--text2);}
+.modal-song-name strong{color:var(--gold);}
 
 /* PITCH METER */
 .pitch-display{background:var(--bg);border-radius:16px;padding:20px;margin-bottom:20px;text-align:center;}
 .pitch-label{font-size:12px;color:var(--text3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
-.pitch-note{font-family:var(--font-display);font-size:52px;letter-spacing:4px;line-height:1;margin-bottom:4px;transition:color .1s;}
-.pitch-freq{font-size:12px;color:var(--text3);font-variant-numeric:tabular-nums;margin-bottom:16px;}
+.pitch-note{font-family:var(--font-d);font-size:52px;letter-spacing:4px;line-height:1;margin-bottom:4px;transition:color .1s;}
+.pitch-freq{font-size:12px;color:var(--text3);margin-bottom:16px;}
 .pitch-bar-wrap{height:12px;background:var(--bg3);border-radius:6px;overflow:hidden;margin-bottom:8px;}
 .pitch-bar{height:100%;border-radius:6px;transition:width .08s,background .3s;width:0%;}
-.pitch-accuracy-row{display:flex;justify-content:space-between;font-size:12px;}
-.pitch-accuracy-val{font-weight:500;}
+.pitch-acc-row{display:flex;justify-content:space-between;font-size:12px;}
 
 /* SCORE RINGS */
 .score-display{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
 .score-ring-wrap{text-align:center;}
-.score-ring-label{font-size:11px;color:var(--text3);margin-bottom:6px;letter-spacing:0.5px;}
+.score-ring-label{font-size:11px;color:var(--text3);margin-bottom:6px;letter-spacing:.5px;}
 .score-ring{position:relative;width:80px;height:80px;margin:0 auto;}
 .score-ring svg{transform:rotate(-90deg);}
 .score-ring-val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;}
-.score-num{font-family:var(--font-display);font-size:22px;line-height:1;}
+.score-num{font-family:var(--font-d);font-size:22px;line-height:1;}
 .score-unit{font-size:9px;color:var(--text3);}
 
-/* TIMER */
 .timer-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.timer{font-family:var(--font-display);font-size:32px;letter-spacing:3px;color:var(--cyan);}
-.timer.warning{color:var(--gold);}
+.timer{font-family:var(--font-d);font-size:32px;letter-spacing:3px;color:var(--cyan);}
 .waveform{display:flex;align-items:center;gap:3px;height:32px;}
-.wave-bar{width:4px;border-radius:2px;background:var(--purple);animation:wave 0.8s ease-in-out infinite;}
+.wave-bar{width:4px;border-radius:2px;background:var(--purple);animation:wave .8s ease-in-out infinite;}
 .wave-bar:nth-child(2){animation-delay:.1s;}
 .wave-bar:nth-child(3){animation-delay:.2s;}
 .wave-bar:nth-child(4){animation-delay:.3s;}
 .wave-bar:nth-child(5){animation-delay:.15s;}
 @keyframes wave{0%,100%{height:6px;opacity:.4}50%{height:28px;opacity:1}}
 .wave-bar.idle{animation:none;height:6px;opacity:.3;}
-
-/* MODAL BUTTONS */
 .modal-btns{display:flex;gap:10px;}
-.btn-start{flex:1;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--green),#00b050);border:none;color:#000;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s;}
-.btn-stop{flex:1;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--red),#cc0033);border:none;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s;display:none;}
-.btn-finish{flex:1;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#000;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s;display:none;}
+.btn-start{flex:1;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--green),#00b050);border:none;color:#000;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);}
+.btn-stop{flex:1;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--red),#cc0033);border:none;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);display:none;}
+.btn-finish{flex:1;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#000;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);display:none;}
 .btn-cancel{padding:13px 16px;border-radius:12px;background:transparent;border:1px solid var(--border2);color:var(--text2);font-size:14px;cursor:pointer;font-family:var(--font);}
 
-/* RESULT OVERLAY */
+/* RESULT */
 .result-overlay{position:absolute;inset:0;background:var(--bg2);border-radius:24px;padding:28px;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
-.result-grade{font-family:var(--font-display);font-size:80px;line-height:1;margin-bottom:4px;}
+.result-grade{font-family:var(--font-d);font-size:80px;line-height:1;margin-bottom:4px;}
 .result-label{font-size:15px;color:var(--text2);margin-bottom:20px;}
 .result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;margin-bottom:20px;}
 .result-stat{background:var(--bg3);border-radius:12px;padding:12px;}
-.result-stat-val{font-family:var(--font-display);font-size:24px;}
+.result-stat-val{font-family:var(--font-d);font-size:24px;}
 .result-stat-lbl{font-size:11px;color:var(--text3);margin-top:2px;}
 .btn-save{width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#000;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);}
 
@@ -167,45 +170,49 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .board-item.rank-1{border-color:rgba(245,200,66,0.4);background:rgba(245,200,66,0.04);}
 .board-item.rank-2{border-color:rgba(200,200,220,0.3);}
 .board-item.rank-3{border-color:rgba(205,127,50,0.3);}
-.board-rank{font-family:var(--font-display);font-size:22px;min-width:32px;text-align:center;}
+.board-rank{font-family:var(--font-d);font-size:22px;min-width:32px;text-align:center;}
 .rank-1 .board-rank{color:var(--gold);}
 .rank-2 .board-rank{color:#c8c8dc;}
 .rank-3 .board-rank{color:#cd7f32;}
-.board-avatar{width:42px;height:42px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.board-photo{width:44px;height:44px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden;border:2px solid var(--border2);}
+.board-photo img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .board-info{flex:1;}
 .board-name{font-size:14px;font-weight:500;}
 .board-detail{font-size:12px;color:var(--text2);margin-top:2px;}
-.board-score{text-align:right;}
-.board-score-val{font-family:var(--font-display);font-size:26px;color:var(--gold);}
+.board-score-val{font-family:var(--font-d);font-size:26px;color:var(--gold);}
 .board-score-lbl{font-size:10px;color:var(--text3);}
 
 /* HISTORY */
 .history-list{display:flex;flex-direction:column;gap:8px;}
 .history-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;}
-.hist-grade{font-family:var(--font-display);font-size:24px;width:40px;text-align:center;flex-shrink:0;}
+.hist-grade{font-family:var(--font-d);font-size:24px;width:40px;text-align:center;flex-shrink:0;}
+.hist-photo{width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;overflow:hidden;}
+.hist-photo img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .hist-info{flex:1;min-width:0;}
 .hist-song{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hist-detail{font-size:11px;color:var(--text2);margin-top:2px;}
-.hist-score{font-family:var(--font-display);font-size:20px;color:var(--gold);flex-shrink:0;}
+.hist-score{font-family:var(--font-d);font-size:20px;color:var(--gold);flex-shrink:0;}
 .hist-pitch{font-size:11px;color:var(--text3);text-align:right;margin-top:2px;}
-.singer-select-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
-.singer-filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-family:var(--font);border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;}
+.singer-filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.singer-filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-family:var(--font);border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.singer-filter-btn img{width:20px;height:20px;border-radius:50%;object-fit:cover;}
 .singer-filter-btn.active{background:rgba(245,200,66,0.12);border-color:var(--gold);color:var(--gold);}
+
+/* NO-SINGER WARN */
+.warn-bar{background:rgba(255,61,87,0.08);border:1px solid rgba(255,61,87,0.2);border-radius:12px;padding:12px 16px;font-size:13px;color:#ff8899;margin-bottom:16px;display:none;}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:12px 18px;font-size:13px;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;}
 .toast.show{transform:translateY(0);opacity:1;}
 
-/* NO SINGER WARNING */
-.no-singer-warn{background:rgba(255,61,87,0.08);border:1px solid rgba(255,61,87,0.2);border-radius:12px;padding:12px 16px;font-size:13px;color:#ff8899;margin-bottom:16px;display:none;}
+/* LOADING */
+.loading{text-align:center;padding:40px;color:var(--text3);}
 
-/* RESPONSIVE */
 @media(max-width:600px){
   .topbar{padding:0 12px;}
   .nav-tab{padding:5px 10px;font-size:12px;}
   .page{padding:14px;}
   .form-row{grid-template-columns:1fr;}
-  .score-display{grid-template-columns:repeat(3,1fr);}
   .song-actions{flex-direction:column;gap:6px;}
 }
 </style>
@@ -213,7 +220,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <body>
 
 <div class="topbar">
-  <div class="logo">🎤 <span>KaraoKing</span></div>
+  <div class="logo">🎤 KaraoKing</div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('singers')">นักร้อง</button>
     <button class="nav-tab" onclick="showPage('songs')">เพลง</button>
@@ -225,14 +232,23 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- SINGERS PAGE -->
 <div class="page active" id="page-singers">
   <div class="sec-title">นักร้อง</div>
-  <div class="sec-sub">เลือกนักร้องก่อนเริ่มร้องเพลง</div>
-  <div class="no-singer-warn" id="singerWarn">⚠ กรุณาเลือกนักร้องก่อน แล้วไปหน้า "เพลง" เพื่อเริ่มร้อง</div>
-  <div class="singer-grid" id="singerGrid"></div>
+  <div class="sec-sub">กดเลือกนักร้องก่อนร้องเพลง กด ✏ เพื่อแก้ไขรูปและชื่อ</div>
+  <div class="warn-bar" id="singerWarn">⚠ กรุณาเลือกนักร้องก่อน แล้วไปหน้า "เพลง"</div>
+  <div class="singer-grid" id="singerGrid"><div class="loading">กำลังโหลด...</div></div>
   <div class="add-form">
     <div class="form-title">เพิ่มนักร้องใหม่</div>
     <div class="form-row">
-      <input class="form-input" id="singerName" placeholder="ชื่อนักร้อง">
-      <input class="form-input" id="singerAvatar" placeholder="Emoji (เช่น 🎤 🌟 🎵)">
+      <input class="form-input" id="newSingerName" placeholder="ชื่อนักร้อง *">
+      <input class="form-input" id="newSingerEmoji" placeholder="Emoji (เช่น 🎤 🌟 👑)">
+    </div>
+    <div class="photo-upload-area" id="newPhotoArea">
+      <img id="newPhotoPreview" class="photo-preview" src="" alt="" style="display:none;">
+      <div class="photo-upload-label" id="newPhotoLabel">📷 คลิกเพื่ออัปโหลดรูปโปรไฟล์</div>
+      <input type="file" class="photo-upload-input" id="newPhotoFile" accept="image/*" onchange="previewNewPhoto(event)">
+    </div>
+    <div class="photo-url-or">— หรือใส่ลิงก์รูปภาพ URL —</div>
+    <div class="form-row full" style="margin-bottom:12px;">
+      <input class="form-input" id="newPhotoUrl" placeholder="https://... (URL รูปภาพ)" oninput="previewNewPhotoUrl(this.value)">
     </div>
     <button class="btn-add" onclick="addSinger()">+ เพิ่มนักร้อง</button>
   </div>
@@ -241,17 +257,17 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- SONGS PAGE -->
 <div class="page" id="page-songs">
   <div class="sec-title">คลังเพลง</div>
-  <div class="sec-sub">เพิ่มเพลงที่อยากร้อง กดปุ่ม YouTube เพื่อเปิด แล้วกด "ร้องเลย" เพื่อวัดคะแนน</div>
-  <div class="no-singer-warn" id="songWarn" style="display:block;">⚠ ยังไม่ได้เลือกนักร้อง — ไปที่หน้า "นักร้อง" เพื่อเลือกก่อนนะครับ</div>
+  <div class="sec-sub">เพิ่มเพลงที่อยากร้อง กด YouTube เพื่อเปิด แล้วกด "ร้องเลย" เพื่อวัดคะแนน</div>
+  <div class="warn-bar" id="songWarn" style="display:block;">⚠ ยังไม่ได้เลือกนักร้อง — กลับหน้า "นักร้อง" เพื่อเลือกก่อน</div>
   <input class="song-search" id="songSearch" placeholder="🔍 ค้นหาชื่อเพลง หรือศิลปิน..." oninput="renderSongs()">
-  <div class="filter-row" id="langFilter">
+  <div class="filter-row">
     <button class="filter-btn active" onclick="setLangFilter('all',this)">ทั้งหมด</button>
     <button class="filter-btn" onclick="setLangFilter('ไทย',this)">ไทย</button>
     <button class="filter-btn" onclick="setLangFilter('สากล',this)">สากล</button>
     <button class="filter-btn" onclick="setLangFilter('จีน',this)">จีน</button>
     <button class="filter-btn" onclick="setLangFilter('ญี่ปุ่น',this)">ญี่ปุ่น</button>
   </div>
-  <div class="song-list" id="songList"></div>
+  <div class="song-list" id="songList"><div class="loading">กำลังโหลด...</div></div>
   <div class="add-form" style="margin-top:20px;">
     <div class="form-title">เพิ่มเพลงใหม่</div>
     <div class="form-row">
@@ -259,10 +275,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <input class="form-input" id="songArtist" placeholder="ศิลปิน">
     </div>
     <div class="form-row full">
-      <input class="form-input" id="songYoutube" placeholder="ลิงก์ YouTube (https://youtube.com/...)">
+      <input class="form-input" id="songYoutube" placeholder="ลิงก์ YouTube">
     </div>
     <div class="form-row">
-      <input class="form-input" id="songKey" placeholder="คีย์ (เช่น C, Am, G)">
+      <input class="form-input" id="songKey" placeholder="คีย์ (เช่น C, Am)">
       <select class="form-input" id="songLang">
         <option value="ไทย">ไทย</option>
         <option value="สากล">สากล</option>
@@ -278,112 +294,113 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- BOARD PAGE -->
 <div class="page" id="page-board">
   <div class="sec-title">Leaderboard</div>
-  <div class="sec-sub">อันดับคะแนนเฉลี่ยของแต่ละคน</div>
-  <div class="board-wrap" id="boardList"></div>
+  <div class="sec-sub">อันดับคะแนนเฉลี่ย</div>
+  <div class="board-wrap" id="boardList"><div class="loading">กำลังโหลด...</div></div>
 </div>
 
 <!-- HISTORY PAGE -->
 <div class="page" id="page-history">
   <div class="sec-title">ประวัติการร้อง</div>
-  <div class="sec-sub">บันทึกทุกครั้งที่ร้อง</div>
-  <div class="singer-select-row" id="histFilterRow"></div>
-  <div class="history-list" id="historyList"></div>
+  <div class="sec-sub">บันทึกทุกครั้ง</div>
+  <div class="singer-filter-row" id="histFilterRow"></div>
+  <div class="history-list" id="historyList"><div class="loading">กำลังโหลด...</div></div>
+</div>
+
+<!-- EDIT SINGER MODAL -->
+<div class="modal-backdrop hidden" id="editModal">
+  <div class="modal edit-modal">
+    <div style="font-family:var(--font-d);font-size:22px;letter-spacing:2px;margin-bottom:18px;">แก้ไขนักร้อง</div>
+    <input type="hidden" id="editSingerId">
+    <input type="hidden" id="editOldFileId">
+    <div class="edit-photo-wrap">
+      <div class="edit-avatar" id="editAvatarPreview">🎤</div>
+      <div class="edit-photo-btns">
+        <label class="btn-photo-upload">
+          📷 อัปโหลดรูป
+          <input type="file" accept="image/*" onchange="handleEditPhotoUpload(event)">
+        </label>
+        <button class="btn-photo-url" onclick="promptPhotoUrl()">🔗 ใส่ URL</button>
+        <button class="btn-photo-del" onclick="removeEditPhoto()">✕ ลบรูป</button>
+      </div>
+      <div class="upload-progress" id="editUploadProgress">
+        <div class="upload-progress-bar" id="editUploadBar"></div>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom:10px;">
+      <input class="form-input" id="editSingerName" placeholder="ชื่อนักร้อง">
+      <input class="form-input" id="editSingerEmoji" placeholder="Emoji">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:6px;">
+      <button class="btn-add" style="flex:1;" onclick="saveEditSinger()">💾 บันทึก</button>
+      <button class="btn-cancel" onclick="closeEditModal()">ยกเลิก</button>
+    </div>
+  </div>
 </div>
 
 <!-- SINGING MODAL -->
 <div class="modal-backdrop hidden" id="singModal">
   <div class="modal">
-    <div class="modal-singer">
+    <div class="modal-singer-row">
       <div class="modal-avatar" id="modalAvatar">🎤</div>
       <div>
         <div class="modal-singer-name" id="modalSingerName">—</div>
-        <div class="modal-song">กำลังร้อง: <strong id="modalSongTitle">—</strong></div>
+        <div class="modal-song-name">กำลังร้อง: <strong id="modalSongTitle">—</strong></div>
       </div>
     </div>
-
     <div class="pitch-display">
       <div class="pitch-label">Note Detection</div>
       <div class="pitch-note" id="pitchNote">—</div>
       <div class="pitch-freq" id="pitchFreq">0 Hz</div>
-      <div class="pitch-bar-wrap">
-        <div class="pitch-bar" id="pitchBar"></div>
-      </div>
-      <div class="pitch-accuracy-row">
+      <div class="pitch-bar-wrap"><div class="pitch-bar" id="pitchBar"></div></div>
+      <div class="pitch-acc-row">
         <span style="font-size:11px;color:var(--text3)">Pitch Accuracy</span>
-        <span class="pitch-accuracy-val" id="pitchAccVal" style="color:var(--green)">0%</span>
+        <span id="pitchAccVal" style="font-size:12px;font-weight:500;color:var(--green)">0%</span>
       </div>
     </div>
-
     <div class="score-display">
       <div class="score-ring-wrap">
         <div class="score-ring-label">คะแนนรวม</div>
         <div class="score-ring">
-          <svg width="80" height="80" viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="34" fill="none" stroke="var(--bg3)" stroke-width="8"/>
-            <circle cx="40" cy="40" r="34" fill="none" stroke="var(--gold)" stroke-width="8" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" id="scoreRing" style="transition:stroke-dashoffset .5s"/>
-          </svg>
+          <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" fill="none" stroke="var(--bg3)" stroke-width="8"/><circle cx="40" cy="40" r="34" fill="none" stroke="var(--gold)" stroke-width="8" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" id="scoreRing" style="transition:stroke-dashoffset .5s"/></svg>
           <div class="score-ring-val"><span class="score-num" id="scoreNum" style="color:var(--gold)">0</span><span class="score-unit">pts</span></div>
         </div>
       </div>
       <div class="score-ring-wrap">
         <div class="score-ring-label">Pitch %</div>
         <div class="score-ring">
-          <svg width="80" height="80" viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="34" fill="none" stroke="var(--bg3)" stroke-width="8"/>
-            <circle cx="40" cy="40" r="34" fill="none" stroke="var(--cyan)" stroke-width="8" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" id="pitchRing" style="transition:stroke-dashoffset .5s"/>
-          </svg>
+          <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" fill="none" stroke="var(--bg3)" stroke-width="8"/><circle cx="40" cy="40" r="34" fill="none" stroke="var(--cyan)" stroke-width="8" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" id="pitchRing" style="transition:stroke-dashoffset .5s"/></svg>
           <div class="score-ring-val"><span class="score-num" id="pitchPct" style="color:var(--cyan)">0</span><span class="score-unit">%</span></div>
         </div>
       </div>
       <div class="score-ring-wrap">
         <div class="score-ring-label">เวลา</div>
         <div class="score-ring">
-          <svg width="80" height="80" viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="34" fill="none" stroke="var(--bg3)" stroke-width="8"/>
-            <circle cx="40" cy="40" r="34" fill="none" stroke="var(--purple)" stroke-width="8" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" id="timeRing" style="transition:stroke-dashoffset .5s"/>
-          </svg>
+          <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" fill="none" stroke="var(--bg3)" stroke-width="8"/><circle cx="40" cy="40" r="34" fill="none" stroke="var(--purple)" stroke-width="8" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" id="timeRing" style="transition:stroke-dashoffset .5s"/></svg>
           <div class="score-ring-val"><span class="score-num" id="timeNum" style="color:var(--purple)">0</span><span class="score-unit">วิ</span></div>
         </div>
       </div>
     </div>
-
     <div class="timer-row">
       <div class="timer" id="timerDisp">00:00</div>
-      <div class="waveform" id="waveform">
-        <div class="wave-bar idle" id="wb1"></div>
-        <div class="wave-bar idle" id="wb2"></div>
-        <div class="wave-bar idle" id="wb3"></div>
-        <div class="wave-bar idle" id="wb4"></div>
-        <div class="wave-bar idle" id="wb5"></div>
+      <div class="waveform">
+        <div class="wave-bar idle"></div><div class="wave-bar idle"></div><div class="wave-bar idle"></div><div class="wave-bar idle"></div><div class="wave-bar idle"></div>
       </div>
     </div>
-
     <div class="modal-btns">
       <button class="btn-start" id="btnStart" onclick="startSinging()">🎤 เริ่มร้อง</button>
       <button class="btn-stop" id="btnStop" onclick="stopSinging()">⏹ หยุด</button>
       <button class="btn-finish" id="btnFinish" onclick="showResult()">✓ จบเพลง</button>
       <button class="btn-cancel" onclick="closeModal()">✕</button>
     </div>
-
-    <!-- RESULT OVERLAY -->
     <div class="result-overlay" id="resultOverlay">
       <div class="result-grade" id="resultGrade">🎤</div>
-      <div class="result-label" id="resultLabel">กำลังคำนวณ...</div>
+      <div class="result-label" id="resultLabel"></div>
       <div class="result-stats">
-        <div class="result-stat">
-          <div class="result-stat-val" id="resPts" style="color:var(--gold)">0</div>
-          <div class="result-stat-lbl">คะแนน</div>
-        </div>
-        <div class="result-stat">
-          <div class="result-stat-val" id="resPitch" style="color:var(--cyan)">0%</div>
-          <div class="result-stat-lbl">Pitch</div>
-        </div>
-        <div class="result-stat">
-          <div class="result-stat-val" id="resDur" style="color:var(--purple)">0 วิ</div>
-          <div class="result-stat-lbl">เวลา</div>
-        </div>
+        <div class="result-stat"><div class="result-stat-val" id="resPts" style="color:var(--gold)">0</div><div class="result-stat-lbl">คะแนน</div></div>
+        <div class="result-stat"><div class="result-stat-val" id="resPitch" style="color:var(--cyan)">0%</div><div class="result-stat-lbl">Pitch</div></div>
+        <div class="result-stat"><div class="result-stat-val" id="resDur" style="color:var(--purple)">0 วิ</div><div class="result-stat-lbl">เวลา</div></div>
       </div>
-      <button class="btn-save" id="btnSave" onclick="saveResult()">💾 บันทึกคะแนน</button>
+      <button class="btn-save" onclick="saveResult()">💾 บันทึกคะแนน</button>
     </div>
   </div>
 </div>
@@ -391,103 +408,251 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <div class="toast" id="toast"></div>
 
 <script>
-const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyV2NLxlXLBI7-_Hchv7S5ki76UjK3k-yKaS-B8RmOXXBesoFkdU-nnunuBM0nj3UWj/exec';
 
-let singers = [], songs = [], history = [];
-let selectedSingerId = null;
-let currentSong = null, currentSinger = null;
-let langFilter = 'all';
-let histFilterSinger = 'all';
-
-// Audio
-let audioCtx = null, analyser = null, mic = null, pitchTimer = null;
-let singerTimer = null, elapsedSec = 0;
-let pitchReadings = [], goodPitchCount = 0, totalPitchCount = 0;
-let isSinging = false;
+let singers=[], songs=[], history=[];
+let selectedSingerId=null, currentSong=null, currentSinger=null;
+let langFilter='all', histFilterSinger='all';
+let audioCtx=null, analyser=null, mic=null, pitchTimer=null, singerTimer=null;
+let elapsedSec=0, goodPitchCount=0, totalPitchCount=0, isSinging=false;
+// edit modal state
+let editNewPhotoData=null; // {base64, filename, mimeType} or null
+let editNewPhotoUrl=null;  // string URL or null
+let editPhotoChanged=false;
 
 // ---- API ----
-async function api(params) {
+async function apiGet(params) {
   try {
-    const url = SCRIPT_URL + '?' + new URLSearchParams(params);
-    const res = await fetch(url);
-    return await res.json();
-  } catch(e) { return { error: e.message }; }
+    const r = await fetch(SCRIPT_URL + '?' + new URLSearchParams(params));
+    return await r.json();
+  } catch(e) { showToast('เชื่อมต่อล้มเหลว'); return {}; }
+}
+async function apiPost(body) {
+  try {
+    const r = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify(body) });
+    return await r.json();
+  } catch(e) { showToast('เชื่อมต่อล้มเหลว'); return {}; }
 }
 
 // ---- INIT ----
 async function init() {
-  singers = await api({ action: 'getSingers' }) || [];
-  songs = await api({ action: 'getSongs' }) || [];
+  const [s, sg] = await Promise.all([
+    apiGet({action:'getSingers'}),
+    apiGet({action:'getSongs'})
+  ]);
+  singers = Array.isArray(s) ? s : [];
+  songs   = Array.isArray(sg) ? sg : [];
   renderSingers();
   renderSongs();
-  loadBoard();
-  loadHistory();
 }
 
-// ---- SINGERS ----
+// ---- PHOTO HELPER ----
+function singerPhotoHTML(s, size=64, cls='singer-photo') {
+  if (s.photoUrl) return `<div class="${cls}" style="width:${size}px;height:${size}px;"><img src="${s.photoUrl}" alt="${s.name}" onerror="this.parentElement.innerHTML='${s.emoji||'🎤'}'"></div>`;
+  return `<div class="${cls}" style="width:${size}px;height:${size}px;font-size:${Math.round(size*0.46)}px;">${s.emoji||'🎤'}</div>`;
+}
+
+function fileToBase64(file) {
+  return new Promise((res,rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+// ---- ADD SINGER FORM ----
+function previewNewPhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const prev = document.getElementById('newPhotoPreview');
+  prev.src = url; prev.style.display = 'block';
+  document.getElementById('newPhotoLabel').style.display = 'none';
+  document.getElementById('newPhotoUrl').value = '';
+}
+function previewNewPhotoUrl(url) {
+  const prev = document.getElementById('newPhotoPreview');
+  if (url) { prev.src = url; prev.style.display = 'block'; document.getElementById('newPhotoLabel').style.display = 'none'; }
+  else { prev.style.display = 'none'; document.getElementById('newPhotoLabel').style.display = 'block'; }
+}
+
+async function addSinger() {
+  const name = document.getElementById('newSingerName').value.trim();
+  if (!name) { showToast('กรุณาใส่ชื่อนักร้อง'); return; }
+  const emoji  = document.getElementById('newSingerEmoji').value.trim() || '🎤';
+  const urlVal = document.getElementById('newPhotoUrl').value.trim();
+  const fileEl = document.getElementById('newPhotoFile');
+  let photoUrl = '', driveFileId = '';
+
+  showToast('⏳ กำลังบันทึก...');
+  if (fileEl.files[0]) {
+    const base64 = await fileToBase64(fileEl.files[0]);
+    const res = await apiPost({ action:'uploadPhoto', base64, filename: fileEl.files[0].name, mimeType: fileEl.files[0].type });
+    if (res.success) { photoUrl = res.photoUrl; driveFileId = res.fileId; }
+  } else if (urlVal) {
+    photoUrl = urlVal;
+  }
+
+  const r = await apiGet({ action:'addSinger', name, emoji, photoUrl, driveFileId });
+  if (r.success) {
+    singers = await apiGet({action:'getSingers'}) || [];
+    renderSingers();
+    document.getElementById('newSingerName').value='';
+    document.getElementById('newSingerEmoji').value='';
+    document.getElementById('newPhotoUrl').value='';
+    document.getElementById('newPhotoPreview').style.display='none';
+    document.getElementById('newPhotoLabel').style.display='block';
+    fileEl.value='';
+    showToast('เพิ่มนักร้องแล้ว ✓');
+  }
+}
+
+// ---- RENDER SINGERS ----
 function renderSingers() {
   const grid = document.getElementById('singerGrid');
   grid.innerHTML = singers.map(s => `
     <div class="singer-card ${selectedSingerId===s.id?'selected':''}" onclick="selectSinger('${s.id}')">
-      <div class="singer-avatar">${s.avatar||'🎤'}</div>
+      <button class="singer-edit-btn" onclick="event.stopPropagation();openEditModal('${s.id}')">✏</button>
+      <button class="singer-del-btn" onclick="event.stopPropagation();deleteSinger('${s.id}')">✕</button>
+      ${singerPhotoHTML(s,64,'singer-photo')}
       <div class="singer-name">${s.name}</div>
-      <div class="singer-stats" id="stats-${s.id}">กำลังโหลด...</div>
-    </div>
-  `).join('') + `
-    <div class="singer-card singer-add" onclick="document.getElementById('singerName').focus();showPage('singers')">
-      <div class="singer-avatar">+</div>
+      <div class="singer-stats" id="stats-${s.id}">—</div>
+    </div>`).join('') + `
+    <div class="singer-card singer-add" onclick="document.getElementById('newSingerName').focus();showPage('singers')">
+      <div class="singer-photo" style="width:64px;height:64px;font-size:30px;color:var(--text3)">+</div>
       <div class="singer-name" style="color:var(--text3)">เพิ่มนักร้อง</div>
     </div>`;
   singers.forEach(s => loadSingerStats(s.id));
 }
 
+function selectSinger(id) {
+  selectedSingerId = selectedSingerId===id ? null : id;
+  renderSingers();
+  document.getElementById('singerWarn').style.display = selectedSingerId ? 'none' : 'block';
+  document.getElementById('songWarn').style.display   = selectedSingerId ? 'none' : 'block';
+}
+
 async function loadSingerStats(id) {
-  const hist = await api({ action: 'getHistory', singerId: id }) || [];
-  const el = document.getElementById('stats-' + id);
+  const hist = await apiGet({action:'getHistory', singerId:id}) || [];
+  const el = document.getElementById('stats-'+id);
   if (!el) return;
-  if (!hist.length) { el.textContent = 'ยังไม่เคยร้อง'; return; }
-  const avg = Math.round(hist.reduce((a,h) => a + (h.score||0), 0) / hist.length);
+  if (!hist.length) { el.textContent='ยังไม่เคยร้อง'; return; }
+  const avg = Math.round(hist.reduce((a,h)=>a+(Number(h.score)||0),0)/hist.length);
   el.textContent = `${hist.length} เพลง · เฉลี่ย ${avg} pts`;
 }
 
-function selectSinger(id) {
-  selectedSingerId = selectedSingerId === id ? null : id;
+async function deleteSinger(id) {
+  if (!confirm('ลบนักร้องนี้? (รูปใน Drive จะถูกลบด้วย)')) return;
+  await apiGet({action:'deleteSinger', id});
+  if (selectedSingerId===id) selectedSingerId=null;
+  singers = await apiGet({action:'getSingers'}) || [];
   renderSingers();
-  const warn = document.getElementById('singerWarn');
-  warn.style.display = selectedSingerId ? 'none' : 'block';
-  updateSongWarn();
+  showToast('ลบนักร้องแล้ว');
 }
 
-async function addSinger() {
-  const name = document.getElementById('singerName').value.trim();
-  if (!name) { showToast('กรุณาใส่ชื่อนักร้อง'); return; }
-  const avatar = document.getElementById('singerAvatar').value.trim() || '🎤';
-  const r = await api({ action: 'addSinger', name, avatar });
-  if (r.success) {
-    singers = await api({ action: 'getSingers' }) || [];
-    renderSingers();
-    document.getElementById('singerName').value = '';
-    document.getElementById('singerAvatar').value = '';
-    showToast('เพิ่มนักร้องแล้ว ✓');
+// ---- EDIT SINGER MODAL ----
+function openEditModal(id) {
+  const s = singers.find(x=>x.id===id);
+  if (!s) return;
+  editNewPhotoData=null; editNewPhotoUrl=null; editPhotoChanged=false;
+  document.getElementById('editSingerId').value = s.id;
+  document.getElementById('editOldFileId').value = s.driveFileId||'';
+  document.getElementById('editSingerName').value = s.name;
+  document.getElementById('editSingerEmoji').value = s.emoji||'🎤';
+  // preview
+  const av = document.getElementById('editAvatarPreview');
+  if (s.photoUrl) av.innerHTML=`<img src="${s.photoUrl}" onerror="this.parentElement.innerHTML='${s.emoji||'🎤'}'">`;
+  else av.innerHTML = s.emoji||'🎤';
+  document.getElementById('editUploadProgress').style.display='none';
+  document.getElementById('editModal').classList.remove('hidden');
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.add('hidden');
+  editNewPhotoData=null; editNewPhotoUrl=null; editPhotoChanged=false;
+}
+
+async function handleEditPhotoUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  editNewPhotoData = { file, filename: file.name, mimeType: file.type };
+  editNewPhotoUrl = null;
+  editPhotoChanged = true;
+  const url = URL.createObjectURL(file);
+  const av = document.getElementById('editAvatarPreview');
+  av.innerHTML = `<img src="${url}">`;
+}
+
+function promptPhotoUrl() {
+  const url = prompt('ใส่ URL รูปภาพ:');
+  if (!url) return;
+  editNewPhotoUrl = url;
+  editNewPhotoData = null;
+  editPhotoChanged = true;
+  const av = document.getElementById('editAvatarPreview');
+  av.innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='❌'">`;
+}
+
+function removeEditPhoto() {
+  editNewPhotoData = null;
+  editNewPhotoUrl = null;
+  editPhotoChanged = true;
+  const emoji = document.getElementById('editSingerEmoji').value || '🎤';
+  document.getElementById('editAvatarPreview').innerHTML = emoji;
+}
+
+async function saveEditSinger() {
+  const id       = document.getElementById('editSingerId').value;
+  const name     = document.getElementById('editSingerName').value.trim();
+  const emoji    = document.getElementById('editSingerEmoji').value.trim() || '🎤';
+  const oldFileId= document.getElementById('editOldFileId').value;
+  const s        = singers.find(x=>x.id===id);
+
+  let photoUrl = s ? (s.photoUrl||'') : '';
+  let driveFileId = s ? (s.driveFileId||'') : '';
+  let delOldFile = '';
+
+  if (editPhotoChanged) {
+    if (editNewPhotoData) {
+      // อัปโหลดรูปใหม่
+      const prog = document.getElementById('editUploadProgress');
+      const bar  = document.getElementById('editUploadBar');
+      prog.style.display='block'; bar.style.width='30%';
+      showToast('⏳ กำลังอัปโหลดรูป...');
+      const base64 = await fileToBase64(editNewPhotoData.file);
+      bar.style.width='70%';
+      const res = await apiPost({ action:'uploadPhoto', base64, filename:editNewPhotoData.filename, mimeType:editNewPhotoData.mimeType, oldFileId });
+      bar.style.width='100%';
+      if (res.success) { photoUrl=res.photoUrl; driveFileId=res.fileId; delOldFile=''; }
+    } else if (editNewPhotoUrl) {
+      // ใส่ URL ใหม่ + ลบ Drive เก่า
+      photoUrl = editNewPhotoUrl; driveFileId=''; delOldFile=oldFileId;
+    } else {
+      // ลบรูป
+      photoUrl=''; driveFileId=''; delOldFile=oldFileId;
+    }
   }
+
+  await apiGet({ action:'updateSinger', id, name, emoji, photoUrl, driveFileId, oldFileId: delOldFile });
+  singers = await apiGet({action:'getSingers'}) || [];
+  renderSingers();
+  closeEditModal();
+  showToast('บันทึกแล้ว ✓');
 }
 
 // ---- SONGS ----
 function setLangFilter(lang, btn) {
-  langFilter = lang;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  langFilter=lang;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderSongs();
 }
 
 function renderSongs() {
   const q = document.getElementById('songSearch').value.toLowerCase();
-  let list = songs.filter(s =>
-    (langFilter === 'all' || s.language === langFilter) &&
-    (s.title.toLowerCase().includes(q) || (s.artist||'').toLowerCase().includes(q))
-  );
-  updateSongWarn();
-  document.getElementById('songList').innerHTML = list.length ? list.map((s, i) => `
+  const list = songs.filter(s=>(langFilter==='all'||s.language===langFilter)&&(s.title.toLowerCase().includes(q)||(s.artist||'').toLowerCase().includes(q)));
+  document.getElementById('songList').innerHTML = list.length ? list.map((s,i)=>`
     <div class="song-item">
       <div class="song-num">${i+1}</div>
       <div class="song-info">
@@ -503,343 +668,251 @@ function renderSongs() {
         <button class="btn-sing" onclick="openModal('${s.id}')">🎤 ร้องเลย</button>
         <button class="btn-del" onclick="deleteSong('${s.id}')">✕</button>
       </div>
-    </div>
-  `).join('') : '<div style="text-align:center;padding:40px;color:var(--text3)">ยังไม่มีเพลง — เพิ่มเพลงด้านล่างได้เลย</div>';
-}
-
-function updateSongWarn() {
-  document.getElementById('songWarn').style.display = selectedSingerId ? 'none' : 'block';
+    </div>`).join('')
+    : '<div style="text-align:center;padding:40px;color:var(--text3)">ยังไม่มีเพลง</div>';
 }
 
 async function addSong() {
   const title = document.getElementById('songTitle').value.trim();
   if (!title) { showToast('กรุณาใส่ชื่อเพลง'); return; }
-  const r = await api({
-    action: 'addSong',
-    title,
+  const r = await apiGet({action:'addSong', title,
     artist: document.getElementById('songArtist').value.trim(),
     youtube: document.getElementById('songYoutube').value.trim(),
     key: document.getElementById('songKey').value.trim(),
     language: document.getElementById('songLang').value
   });
   if (r.success) {
-    songs = await api({ action: 'getSongs' }) || [];
+    songs = await apiGet({action:'getSongs'}) || [];
     renderSongs();
-    ['songTitle','songArtist','songYoutube','songKey'].forEach(id => document.getElementById(id).value = '');
+    ['songTitle','songArtist','songYoutube','songKey'].forEach(id=>document.getElementById(id).value='');
     showToast('เพิ่มเพลงแล้ว ✓');
   }
 }
 
 async function deleteSong(id) {
   if (!confirm('ลบเพลงนี้?')) return;
-  await api({ action: 'deleteSong', id });
-  songs = await api({ action: 'getSongs' }) || [];
+  await apiGet({action:'deleteSong', id});
+  songs = await apiGet({action:'getSongs'}) || [];
   renderSongs();
 }
 
-// ---- MODAL ----
+// ---- SINGING MODAL ----
 function openModal(songId) {
-  if (!selectedSingerId) {
-    showToast('⚠ เลือกนักร้องก่อนนะครับ');
-    showPage('singers');
-    document.getElementById('singerWarn').style.display = 'block';
-    return;
-  }
-  currentSong = songs.find(s => s.id === songId);
-  currentSinger = singers.find(s => s.id === selectedSingerId);
-  if (!currentSong || !currentSinger) return;
-
-  document.getElementById('modalAvatar').textContent = currentSinger.avatar || '🎤';
+  if (!selectedSingerId) { showToast('⚠ เลือกนักร้องก่อน'); showPage('singers'); document.getElementById('singerWarn').style.display='block'; return; }
+  currentSong   = songs.find(s=>s.id===songId);
+  currentSinger = singers.find(s=>s.id===selectedSingerId);
+  if (!currentSong||!currentSinger) return;
+  // set avatar
+  const av = document.getElementById('modalAvatar');
+  if (currentSinger.photoUrl) av.innerHTML=`<img src="${currentSinger.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  else av.innerHTML = currentSinger.emoji||'🎤';
   document.getElementById('modalSingerName').textContent = currentSinger.name;
-  document.getElementById('modalSongTitle').textContent = currentSong.title;
+  document.getElementById('modalSongTitle').textContent  = currentSong.title;
   document.getElementById('singModal').classList.remove('hidden');
   resetModal();
 }
 
 function resetModal() {
-  isSinging = false;
-  elapsedSec = 0; pitchReadings = []; goodPitchCount = 0; totalPitchCount = 0;
-  document.getElementById('timerDisp').textContent = '00:00';
-  document.getElementById('pitchNote').textContent = '—';
-  document.getElementById('pitchNote').style.color = 'var(--text)';
-  document.getElementById('pitchFreq').textContent = '0 Hz';
-  document.getElementById('pitchBar').style.width = '0%';
-  document.getElementById('pitchAccVal').textContent = '0%';
-  document.getElementById('scoreNum').textContent = '0';
-  document.getElementById('pitchPct').textContent = '0';
-  document.getElementById('timeNum').textContent = '0';
-  setRing('scoreRing', 0); setRing('pitchRing', 0); setRing('timeRing', 0);
-  document.getElementById('btnStart').style.display = 'block';
-  document.getElementById('btnStop').style.display = 'none';
-  document.getElementById('btnFinish').style.display = 'none';
-  document.getElementById('resultOverlay').style.display = 'none';
+  isSinging=false; elapsedSec=0; goodPitchCount=0; totalPitchCount=0;
+  document.getElementById('timerDisp').textContent='00:00';
+  document.getElementById('pitchNote').textContent='—';
+  document.getElementById('pitchNote').style.color='var(--text)';
+  document.getElementById('pitchFreq').textContent='0 Hz';
+  document.getElementById('pitchBar').style.width='0%';
+  document.getElementById('pitchAccVal').textContent='0%';
+  document.getElementById('scoreNum').textContent='0';
+  document.getElementById('pitchPct').textContent='0';
+  document.getElementById('timeNum').textContent='0';
+  setRing('scoreRing',0); setRing('pitchRing',0); setRing('timeRing',0);
+  document.getElementById('btnStart').style.display='block';
+  document.getElementById('btnStop').style.display='none';
+  document.getElementById('btnFinish').style.display='none';
+  document.getElementById('resultOverlay').style.display='none';
   setWaveIdle(true);
 }
 
-function closeModal() {
-  stopAudio();
-  document.getElementById('singModal').classList.add('hidden');
-  currentSong = null;
-}
+function closeModal() { stopAudio(); document.getElementById('singModal').classList.add('hidden'); }
 
-// ---- PITCH DETECTION ----
-const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-function freqToNote(f) {
-  if (f < 50) return null;
-  const n = 12 * Math.log2(f / 440) + 69;
-  const idx = Math.round(n) % 12;
-  return NOTES[(idx + 12) % 12];
-}
-function freqToColor(f) {
-  if (f < 80) return 'var(--text3)';
-  if (f < 200) return 'var(--cyan)';
-  if (f < 400) return 'var(--green)';
-  if (f < 700) return 'var(--gold)';
-  return 'var(--pink)';
-}
+const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+function freqToNote(f){ if(f<50)return null; const n=12*Math.log2(f/440)+69; return NOTES[((Math.round(n)%12)+12)%12]; }
+function freqColor(f){ if(f<80)return'var(--text3)'; if(f<200)return'var(--cyan)'; if(f<400)return'var(--green)'; if(f<700)return'var(--gold)'; return'var(--pink)'; }
 
-function autoCorrelate(buf, sampleRate) {
-  const SIZE = buf.length;
-  let rms = 0;
-  for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
-  rms = Math.sqrt(rms / SIZE);
-  if (rms < 0.01) return -1;
-  let r1 = 0, r2 = SIZE - 1;
-  const thres = 0.2;
-  for (let i = 0; i < SIZE / 2; i++) { if (Math.abs(buf[i]) < thres) { r1 = i; break; } }
-  for (let i = 1; i < SIZE / 2; i++) { if (Math.abs(buf[SIZE - i]) < thres) { r2 = SIZE - i; break; } }
-  buf = buf.slice(r1, r2);
-  const c = new Array(buf.length).fill(0);
-  for (let i = 0; i < buf.length; i++) for (let j = 0; j < buf.length - i; j++) c[i] += buf[j] * buf[j + i];
-  let d = 0; while (c[d] > c[d + 1]) d++;
-  let maxval = -1, maxpos = -1;
-  for (let i = d; i < buf.length; i++) { if (c[i] > maxval) { maxval = c[i]; maxpos = i; } }
-  let T0 = maxpos;
-  const x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
-  const a = (x1 + x3 - 2 * x2) / 2, b2 = (x3 - x1) / 2;
-  if (a) T0 = T0 - b2 / (2 * a);
-  return sampleRate / T0;
+function autoCorrelate(buf, sr) {
+  let rms=0; for(let i=0;i<buf.length;i++) rms+=buf[i]*buf[i]; rms=Math.sqrt(rms/buf.length);
+  if(rms<0.01) return -1;
+  let r1=0,r2=buf.length-1;
+  for(let i=0;i<buf.length/2;i++){if(Math.abs(buf[i])<0.2){r1=i;break;}}
+  for(let i=1;i<buf.length/2;i++){if(Math.abs(buf[buf.length-i])<0.2){r2=buf.length-i;break;}}
+  buf=buf.slice(r1,r2);
+  const c=new Array(buf.length).fill(0);
+  for(let i=0;i<buf.length;i++) for(let j=0;j<buf.length-i;j++) c[i]+=buf[j]*buf[j+i];
+  let d=0; while(c[d]>c[d+1])d++;
+  let mx=-1,mp=-1;
+  for(let i=d;i<buf.length;i++){if(c[i]>mx){mx=c[i];mp=i;}}
+  const x1=c[mp-1],x2=c[mp],x3=c[mp+1];
+  const a=(x1+x3-2*x2)/2,b2=(x3-x1)/2;
+  let T0=mp; if(a) T0=mp-b2/(2*a);
+  return sr/T0;
 }
 
 async function startSinging() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 2048;
-    mic = audioCtx.createMediaStreamSource(stream);
-    mic.connect(analyser);
-    isSinging = true;
-    setWaveIdle(false);
-    document.getElementById('btnStart').style.display = 'none';
-    document.getElementById('btnStop').style.display = 'block';
-    document.getElementById('btnFinish').style.display = 'block';
-
-    // timer
-    singerTimer = setInterval(() => {
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser(); analyser.fftSize=2048;
+    mic = audioCtx.createMediaStreamSource(stream); mic.connect(analyser);
+    isSinging=true; setWaveIdle(false);
+    document.getElementById('btnStart').style.display='none';
+    document.getElementById('btnStop').style.display='block';
+    document.getElementById('btnFinish').style.display='block';
+    singerTimer=setInterval(()=>{
       elapsedSec++;
-      const m = String(Math.floor(elapsedSec/60)).padStart(2,'0');
-      const s = String(elapsedSec%60).padStart(2,'0');
-      document.getElementById('timerDisp').textContent = m+':'+s;
-      document.getElementById('timeNum').textContent = elapsedSec;
-      setRing('timeRing', Math.min(elapsedSec / 240, 1));
-    }, 1000);
-
-    // pitch
-    const buf = new Float32Array(analyser.fftSize);
-    pitchTimer = setInterval(() => {
+      const m=String(Math.floor(elapsedSec/60)).padStart(2,'0'), s=String(elapsedSec%60).padStart(2,'0');
+      document.getElementById('timerDisp').textContent=m+':'+s;
+      document.getElementById('timeNum').textContent=elapsedSec;
+      setRing('timeRing',Math.min(elapsedSec/240,1));
+    },1000);
+    const buf=new Float32Array(analyser.fftSize);
+    pitchTimer=setInterval(()=>{
       analyser.getFloatTimeDomainData(buf);
-      const freq = autoCorrelate(buf, audioCtx.sampleRate);
+      const freq=autoCorrelate(buf,audioCtx.sampleRate);
       totalPitchCount++;
-      if (freq > 60 && freq < 1200) {
+      if(freq>60&&freq<1200){
         goodPitchCount++;
-        const note = freqToNote(freq);
-        const pct = Math.round((goodPitchCount / totalPitchCount) * 100);
-        document.getElementById('pitchNote').textContent = note || '—';
-        document.getElementById('pitchNote').style.color = freqToColor(freq);
-        document.getElementById('pitchFreq').textContent = Math.round(freq) + ' Hz';
-        const barPct = Math.min(((freq - 60) / 1140) * 100, 100);
-        const barColor = freq < 200 ? 'var(--cyan)' : freq < 500 ? 'var(--green)' : 'var(--gold)';
-        document.getElementById('pitchBar').style.width = barPct + '%';
-        document.getElementById('pitchBar').style.background = barColor;
-        document.getElementById('pitchAccVal').textContent = pct + '%';
-        document.getElementById('pitchAccVal').style.color = pct > 70 ? 'var(--green)' : pct > 40 ? 'var(--gold)' : 'var(--red)';
-        document.getElementById('pitchPct').textContent = pct;
-        setRing('pitchRing', pct / 100);
-        const score = Math.round(pct * 0.7 + Math.min(elapsedSec / 2, 30));
-        document.getElementById('scoreNum').textContent = score;
-        setRing('scoreRing', Math.min(score / 100, 1));
-        pitchReadings.push(freq);
+        const pct=Math.round((goodPitchCount/totalPitchCount)*100);
+        const note=freqToNote(freq);
+        document.getElementById('pitchNote').textContent=note||'—';
+        document.getElementById('pitchNote').style.color=freqColor(freq);
+        document.getElementById('pitchFreq').textContent=Math.round(freq)+' Hz';
+        document.getElementById('pitchBar').style.width=Math.min(((freq-60)/1140)*100,100)+'%';
+        document.getElementById('pitchBar').style.background=freq<200?'var(--cyan)':freq<500?'var(--green)':'var(--gold)';
+        document.getElementById('pitchAccVal').textContent=pct+'%';
+        document.getElementById('pitchAccVal').style.color=pct>70?'var(--green)':pct>40?'var(--gold)':'var(--red)';
+        document.getElementById('pitchPct').textContent=pct;
+        setRing('pitchRing',pct/100);
+        const score=Math.round(pct*0.7+Math.min(elapsedSec/2,30));
+        document.getElementById('scoreNum').textContent=score;
+        setRing('scoreRing',Math.min(score/100,1));
       } else {
-        document.getElementById('pitchNote').textContent = '—';
-        document.getElementById('pitchNote').style.color = 'var(--text3)';
-        document.getElementById('pitchFreq').textContent = '—';
+        document.getElementById('pitchNote').textContent='—';
+        document.getElementById('pitchNote').style.color='var(--text3)';
       }
-    }, 80);
-  } catch(e) {
-    showToast('ไม่สามารถเข้าถึงไมค์ได้: ' + e.message);
-  }
+    },80);
+  } catch(e){ showToast('ไม่สามารถเข้าถึงไมค์: '+e.message); }
 }
 
-function stopAudio() {
-  clearInterval(pitchTimer); clearInterval(singerTimer);
-  if (audioCtx) { audioCtx.close(); audioCtx = null; }
-  setWaveIdle(true); isSinging = false;
-}
+function stopAudio(){ clearInterval(pitchTimer); clearInterval(singerTimer); if(audioCtx){audioCtx.close();audioCtx=null;} setWaveIdle(true); isSinging=false; }
+function stopSinging(){ stopAudio(); document.getElementById('btnStop').style.display='none'; document.getElementById('btnStart').style.display='block'; }
+function setWaveIdle(idle){ document.querySelectorAll('.wave-bar').forEach(b=>idle?b.classList.add('idle'):b.classList.remove('idle')); }
+function setRing(id,pct){ document.getElementById(id).style.strokeDashoffset=213.6-(213.6*pct); }
 
-function stopSinging() {
+function showResult(){
   stopAudio();
-  document.getElementById('btnStop').style.display = 'none';
-  document.getElementById('btnStart').style.display = 'block';
+  const pct=totalPitchCount?Math.round((goodPitchCount/totalPitchCount)*100):0;
+  const score=Math.round(pct*0.7+Math.min(elapsedSec/2,30));
+  const grades=score>=90?['🏆','ยอดเยี่ยม!','var(--gold)']:score>=75?['⭐','เก่งมาก!','var(--green)']:score>=60?['🎵','ดีมาก!','var(--cyan)']:score>=45?['🎤','พอใช้ได้','var(--purple)']:['🎶','สู้ต่อไป!','var(--pink)'];
+  document.getElementById('resultGrade').textContent=grades[0];
+  document.getElementById('resultLabel').textContent=grades[1];
+  document.getElementById('resultLabel').style.color=grades[2];
+  document.getElementById('resPts').textContent=score;
+  document.getElementById('resPitch').textContent=pct+'%';
+  document.getElementById('resDur').textContent=elapsedSec+' วิ';
+  document.getElementById('resultOverlay').style.display='flex';
+  document.getElementById('btnStop').style.display='none';
+  document.getElementById('btnFinish').style.display='none';
 }
 
-function setWaveIdle(idle) {
-  document.querySelectorAll('.wave-bar').forEach(b => {
-    if (idle) b.classList.add('idle'); else b.classList.remove('idle');
-  });
-}
-
-function setRing(id, pct) {
-  const circ = 213.6;
-  document.getElementById(id).style.strokeDashoffset = circ - (circ * pct);
-}
-
-// ---- RESULT ----
-function showResult() {
-  stopAudio();
-  const pct = totalPitchCount ? Math.round((goodPitchCount / totalPitchCount) * 100) : 0;
-  const score = Math.round(pct * 0.7 + Math.min(elapsedSec / 2, 30));
-  let grade, label, color;
-  if (score >= 90) { grade = '🏆'; label = 'ยอดเยี่ยม! เสียงดีมาก'; color = 'var(--gold)'; }
-  else if (score >= 75) { grade = '⭐'; label = 'เก่งมาก! ทำได้ดีมาก'; color = 'var(--green)'; }
-  else if (score >= 60) { grade = '🎵'; label = 'ดีมาก! ฝึกต่อไปนะ'; color = 'var(--cyan)'; }
-  else if (score >= 45) { grade = '🎤'; label = 'พอใช้ได้ ลองอีกครั้ง'; color = 'var(--purple)'; }
-  else { grade = '🎶'; label = 'สู้ต่อไป! ทุกคนทำได้'; color = 'var(--pink)'; }
-
-  document.getElementById('resultGrade').textContent = grade;
-  document.getElementById('resultLabel').textContent = label;
-  document.getElementById('resultLabel').style.color = color;
-  document.getElementById('resPts').textContent = score;
-  document.getElementById('resPitch').textContent = pct + '%';
-  document.getElementById('resDur').textContent = elapsedSec + ' วิ';
-
-  const overlay = document.getElementById('resultOverlay');
-  overlay.style.display = 'flex';
-  document.getElementById('btnStop').style.display = 'none';
-  document.getElementById('btnFinish').style.display = 'none';
-}
-
-async function saveResult() {
-  const pct = totalPitchCount ? Math.round((goodPitchCount / totalPitchCount) * 100) : 0;
-  const score = Math.round(pct * 0.7 + Math.min(elapsedSec / 2, 30));
-  const r = await api({
-    action: 'addHistory',
-    singerId: currentSinger.id,
-    songId: currentSong.id,
-    score,
-    pitch: pct,
-    duration: elapsedSec
-  });
-  if (r.success) {
-    showToast('บันทึกคะแนนแล้ว ✓');
-    closeModal();
-    loadBoard();
-    loadHistory();
-    loadSingerStats(currentSinger.id);
-  }
+async function saveResult(){
+  const pct=totalPitchCount?Math.round((goodPitchCount/totalPitchCount)*100):0;
+  const score=Math.round(pct*0.7+Math.min(elapsedSec/2,30));
+  const r=await apiGet({action:'addHistory',singerId:currentSinger.id,songId:currentSong.id,score,pitch:pct,duration:elapsedSec});
+  if(r.success){ showToast('บันทึกคะแนนแล้ว ✓'); closeModal(); loadBoard(); loadHistory(); loadSingerStats(currentSinger.id); }
 }
 
 // ---- BOARD ----
-async function loadBoard() {
-  const data = await api({ action: 'getLeaderboard' }) || [];
-  const medals = ['🥇','🥈','🥉'];
-  document.getElementById('boardList').innerHTML = data.length ? data.map((d, i) => `
-    <div class="board-item rank-${i+1}">
-      <div class="board-rank">${medals[i] || (i+1)}</div>
-      <div class="board-avatar">${d.avatar||'🎤'}</div>
+async function loadBoard(){
+  const data=await apiGet({action:'getLeaderboard'})||[];
+  const medals=['🥇','🥈','🥉'];
+  document.getElementById('boardList').innerHTML=data.length?data.map((d,i)=>{
+    const photoHtml = d.photoUrl
+      ? `<div class="board-photo"><img src="${d.photoUrl}" onerror="this.parentElement.innerHTML='${d.emoji||'🎤'}'"></div>`
+      : `<div class="board-photo" style="font-size:22px;">${d.emoji||'🎤'}</div>`;
+    return `<div class="board-item rank-${i+1}">
+      <div class="board-rank">${medals[i]||(i+1)}</div>
+      ${photoHtml}
       <div class="board-info">
         <div class="board-name">${d.name}</div>
         <div class="board-detail">${d.totalSongs} เพลง · Pitch เฉลี่ย ${d.avgPitch}% · สูงสุด ${d.bestScore} pts</div>
       </div>
-      <div class="board-score">
+      <div style="text-align:right;">
         <div class="board-score-val">${d.avgScore}</div>
         <div class="board-score-lbl">avg pts</div>
       </div>
-    </div>
-  `).join('') : '<div style="text-align:center;padding:40px;color:var(--text3)">ยังไม่มีข้อมูล — ร้องเพลงแรกก่อนเลย!</div>';
+    </div>`;
+  }).join(''):'<div style="text-align:center;padding:40px;color:var(--text3)">ยังไม่มีข้อมูล</div>';
 }
 
 // ---- HISTORY ----
-async function loadHistory() {
-  const all = await api({ action: 'getHistory' }) || [];
-  history = all;
+async function loadHistory(){
+  const all=await apiGet({action:'getHistory'})||[];
+  history=all;
   renderHistFilter();
   renderHistory();
 }
 
-function renderHistFilter() {
-  const row = document.getElementById('histFilterRow');
-  row.innerHTML = `<button class="singer-filter-btn ${histFilterSinger==='all'?'active':''}" onclick="setHistFilter('all')">ทั้งหมด</button>`
-    + singers.map(s => `<button class="singer-filter-btn ${histFilterSinger===s.id?'active':''}" onclick="setHistFilter('${s.id}')">${s.avatar||'🎤'} ${s.name}</button>`).join('');
+function renderHistFilter(){
+  document.getElementById('histFilterRow').innerHTML=
+    `<button class="singer-filter-btn ${histFilterSinger==='all'?'active':''}" onclick="setHistFilter('all')">ทั้งหมด</button>`
+    +singers.map(s=>{
+      const img=s.photoUrl?`<img src="${s.photoUrl}" onerror="this.style.display='none'">`:s.emoji||'🎤';
+      return `<button class="singer-filter-btn ${histFilterSinger===s.id?'active':''}" onclick="setHistFilter('${s.id}')">${s.photoUrl?`<img src="${s.photoUrl}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;" onerror="this.style.display='none'">`:s.emoji||'🎤'} ${s.name}</button>`;
+    }).join('');
 }
 
-function setHistFilter(id) {
-  histFilterSinger = id;
-  renderHistFilter();
-  renderHistory();
-}
+function setHistFilter(id){ histFilterSinger=id; renderHistFilter(); renderHistory(); }
 
-function renderHistory() {
-  const list = histFilterSinger === 'all' ? history : history.filter(h => h.singerId === histFilterSinger);
-  const grades = (s) => s >= 90 ? '🏆' : s >= 75 ? '⭐' : s >= 60 ? '🎵' : s >= 45 ? '🎤' : '🎶';
-  const gradeColor = (s) => s >= 90 ? 'var(--gold)' : s >= 75 ? 'var(--green)' : s >= 60 ? 'var(--cyan)' : s >= 45 ? 'var(--purple)' : 'var(--pink)';
-  const singer = (id) => singers.find(s => s.id === id);
-  document.getElementById('historyList').innerHTML = list.length ? list.map(h => {
-    const s = singer(h.singerId);
-    const d = new Date(h.singedAt);
-    const dateStr = isNaN(d) ? '' : d.toLocaleDateString('th-TH',{day:'numeric',month:'short'}) + ' ' + d.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
-    return `
-    <div class="history-item">
-      <div class="hist-grade" style="color:${gradeColor(h.score)}">${grades(h.score)}</div>
-      <div style="width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${s?s.avatar||'🎤':'🎤'}</div>
+function renderHistory(){
+  const list=histFilterSinger==='all'?history:history.filter(h=>h.singerId===histFilterSinger);
+  const gradeOf=s=>s>=90?'🏆':s>=75?'⭐':s>=60?'🎵':s>=45?'🎤':'🎶';
+  const colorOf=s=>s>=90?'var(--gold)':s>=75?'var(--green)':s>=60?'var(--cyan)':s>=45?'var(--purple)':'var(--pink)';
+  document.getElementById('historyList').innerHTML=list.length?list.map(h=>{
+    const s=singers.find(x=>x.id===h.singerId);
+    const d=new Date(h.singAt);
+    const ds=isNaN(d)?'':d.toLocaleDateString('th-TH',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+    const photoDiv=s&&s.photoUrl
+      ?`<div class="hist-photo"><img src="${s.photoUrl}" onerror="this.parentElement.innerHTML='${s?s.emoji||'🎤':'🎤'}'"></div>`
+      :`<div class="hist-photo" style="font-size:18px;">${s?s.emoji||'🎤':'🎤'}</div>`;
+    return `<div class="history-item">
+      <div class="hist-grade" style="color:${colorOf(h.score)}">${gradeOf(h.score)}</div>
+      ${photoDiv}
       <div class="hist-info">
         <div class="hist-song">${h.songTitle||'—'}</div>
-        <div class="hist-detail">${s?s.name:'—'} · ${h.artist||''} · ${dateStr}</div>
+        <div class="hist-detail">${s?s.name:'—'} · ${h.artist||''} · ${ds}</div>
       </div>
       <div>
-        <div class="hist-score" style="color:${gradeColor(h.score)}">${h.score}</div>
+        <div class="hist-score" style="color:${colorOf(h.score)}">${h.score}</div>
         <div class="hist-pitch">Pitch ${h.pitchAccuracy}%</div>
       </div>
     </div>`;
-  }).join('') : '<div style="text-align:center;padding:40px;color:var(--text3)">ยังไม่มีประวัติ</div>';
+  }).join(''):'<div style="text-align:center;padding:40px;color:var(--text3)">ยังไม่มีประวัติ</div>';
 }
 
 // ---- NAV ----
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  const tabs = ['singers','songs','board','history'];
-  const idx = tabs.indexOf(id);
-  document.querySelectorAll('.nav-tab')[idx].classList.add('active');
-  if (id === 'board') loadBoard();
-  if (id === 'history') loadHistory();
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  ['singers','songs','board','history'].forEach((n,i)=>{
+    if(n===id) document.querySelectorAll('.nav-tab')[i].classList.add('active');
+  });
+  if(id==='board') loadBoard();
+  if(id==='history') loadHistory();
 }
 
-// ---- TOAST ----
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// ---- START ----
-if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-  document.body.insertAdjacentHTML('afterbegin', `
-    <div style="background:rgba(245,200,66,0.1);border-bottom:1px solid rgba(245,200,66,0.3);padding:10px 20px;font-size:13px;color:var(--gold);text-align:center;position:relative;z-index:300;">
-      ⚙ ยังไม่ได้ตั้งค่า SCRIPT_URL — เปิด <code>karaoke.html</code> แล้วแก้ไขบรรทัด <code>const SCRIPT_URL = '...'</code>
-    </div>`);
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
 
 init();
