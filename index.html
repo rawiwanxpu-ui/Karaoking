@@ -815,7 +815,6 @@ function resetModal() {
   document.getElementById('pitchPct').textContent='0';
   document.getElementById('timeNum').textContent='0';
   setRing('scoreRing',0); setRing('pitchRing',0); setRing('timeRing',0);
-  document.getElementById('btnStart').style.display='block';
   document.getElementById('btnStop').style.display='none';
   document.getElementById('btnFinish').style.display='none';
   document.getElementById('resultOverlay').style.display='none';
@@ -827,8 +826,6 @@ function resetModal() {
   document.getElementById('playbackSection').style.display='none';
   document.getElementById('playbackAudio').src='';
   document.getElementById('startChoiceRow').style.display='flex';
-  document.getElementById('btnStop').style.display='none';
-  document.getElementById('btnFinish').style.display='none';
   document.getElementById('btnCancelSing').style.display='none';
   audioChunks=[]; recordedBlob=null; withRecording=false;
   setWaveIdle(true);
