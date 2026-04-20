@@ -400,10 +400,23 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       </div>
     </div>
     <div class="modal-btns">
-      <div id="startChoiceRow" style="display:flex;gap:8px;width:100%;">
-        <button class="btn-start" id="btnStartNormal" onclick="startSinging(false)" style="flex:1;">🎤 ร้องเลย</button>
-        <button id="btnStartRecord" onclick="startSinging(true)" style="flex:1;padding:13px;border-radius:12px;background:rgba(0,212,255,0.1);border:1.5px solid var(--cyan);color:var(--cyan);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);">⏺ อัดเสียง</button>
-        <button class="btn-cancel" onclick="closeModal()" style="flex:0;">✕</button>
+      <div id="startChoiceRow" style="display:flex;gap:8px;width:100%;flex-direction:column;">
+        <div id="balanceRow" style="background:var(--bg3);border-radius:10px;padding:10px 12px;">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:6px;">
+            <span>🎵 ดนตรี</span>
+            <span style="color:var(--gold)">ปรับสมดุลเสียง</span>
+            <span>🎤 เสียงร้อง</span>
+          </div>
+          <input type="range" id="micBoost" min="1" max="5" step="0.5" value="2.5"
+            style="width:100%;accent-color:var(--gold);"
+            oninput="document.getElementById('micBoostVal').textContent=(['ดนตรีดัง','ดนตรีดัง','สมดุล','เสียงร้องดัง','เสียงร้องดัง','เสียงร้องดัง่มาก','เสียงร้องดังมาก','เสียงร้องดังมาก','เสียงร้องดังมาก'])[Math.round((this.value-1)/4*8)]||'สมดุล'">
+          <div style="text-align:center;font-size:11px;color:var(--text3);margin-top:4px;" id="micBoostVal">สมดุล</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-start" id="btnStartNormal" onclick="startSinging(false)" style="flex:1;">🎤 ร้องเลย</button>
+          <button id="btnStartRecord" onclick="startSinging(true)" style="flex:1;padding:13px;border-radius:12px;background:rgba(0,212,255,0.1);border:1.5px solid var(--cyan);color:var(--cyan);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);">⏺ อัดเสียง</button>
+          <button class="btn-cancel" onclick="closeModal()" style="flex:0;">✕</button>
+        </div>
       </div>
       <button class="btn-stop" id="btnStop" onclick="stopSinging()">⏹ หยุด</button>
       <button class="btn-finish" id="btnFinish" onclick="showResult()">✓ จบเพลง</button>
@@ -886,13 +899,23 @@ async function startSinging(withRec=false) {
         // ผสมเสียงไมค์ + เสียงดนตรีเข้าด้วยกัน
         const dest = audioCtx.createMediaStreamDestination();
         const micSrc = audioCtx.createMediaStreamSource(micStream);
-        micSrc.connect(dest);
+
+        // เพิ่มเสียงไมค์ตามค่า slider (1-5 เท่า)
+        const micBoostVal = parseFloat(document.getElementById('micBoost').value) || 2.5;
+        const micGain = audioCtx.createGain();
+        micGain.gain.value = micBoostVal;
+        micSrc.connect(micGain);
+        micGain.connect(dest);
 
         const displayAudioTracks = displayStream.getAudioTracks();
         if (displayAudioTracks.length > 0) {
           const displaySrc = audioCtx.createMediaStreamSource(displayStream);
-          displaySrc.connect(dest);
-          showToast('✅ ผสมเสียงดนตรี + เสียงร้องสำเร็จ');
+          // ดนตรีลดลงตามที่ไมค์เพิ่มขึ้น
+          const musicGain = audioCtx.createGain();
+          musicGain.gain.value = Math.max(0.3, 1.5 / micBoostVal);
+          displaySrc.connect(musicGain);
+          musicGain.connect(dest);
+          showToast('✅ ผสมเสียงสำเร็จ — ร้องใส่ไมค์ได้เลย');
         } else {
           showToast('⚠ ไม่พบเสียงจาก tab — ลืมติ๊ก "Share audio" ไหม?');
         }
