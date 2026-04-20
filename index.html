@@ -503,33 +503,41 @@ async function addSinger() {
   if (!name) { showToast('กรุณาใส่ชื่อนักร้อง'); return; }
   const urlVal = document.getElementById('newPhotoUrl').value.trim();
   const fileEl = document.getElementById('newPhotoFile');
-  let photoUrl = '', driveFileId = '';
 
   showToast('⏳ กำลังบันทึก...');
+
+  const params = new URLSearchParams();
+  params.append('action', 'addSinger');
+  params.append('name', name);
+  params.append('emoji', '🎤');
+  params.append('photoUrl', urlVal);
+
+  // ถ้ามีไฟล์รูป ส่ง base64 ไปพร้อมกันเลย ให้ Apps Script จัดการอัปโหลด Drive
   if (fileEl.files[0]) {
-    showToast('⏳ กำลังอัปโหลดรูป...');
     const base64 = await fileToBase64(fileEl.files[0]);
-    const res = await apiPost({ action:'uploadPhoto', base64, filename: fileEl.files[0].name.replace(/\.[^.]+$/,'.jpg'), mimeType: 'image/jpeg' });
-    if (res.success) {
-      photoUrl = res.photoUrl; driveFileId = res.fileId;
-    } else {
-      showToast('❌ อัปโหลดไม่สำเร็จ: ' + (res.error || 'ไม่ทราบสาเหตุ'));
-      return;
-    }
-  } else if (urlVal) {
-    photoUrl = urlVal;
+    params.append('imageBase64', base64);
+    params.append('imageName', fileEl.files[0].name);
+    params.append('imageType', 'image/jpeg');
   }
 
-  const r = await apiGet({ action:'addSinger', name, emoji:'🎤', photoUrl, driveFileId });
-  if (r.success) {
-    singers = await apiGet({action:'getSingers'}) || [];
-    renderSingers();
-    document.getElementById('newSingerName').value='';
-    document.getElementById('newPhotoUrl').value='';
-    document.getElementById('newPhotoPreview').style.display='none';
-    document.getElementById('newPhotoLabel').style.display='block';
-    fileEl.value='';
-    showToast('เพิ่มนักร้องแล้ว ✓');
+  try {
+    const r = await fetch(SCRIPT_URL, { method:'POST', body: params });
+    const text = await r.text();
+    const res = JSON.parse(text);
+    if (res.success) {
+      singers = await apiGet({action:'getSingers'}) || [];
+      renderSingers();
+      document.getElementById('newSingerName').value='';
+      document.getElementById('newPhotoUrl').value='';
+      document.getElementById('newPhotoPreview').style.display='none';
+      document.getElementById('newPhotoLabel').style.display='block';
+      fileEl.value='';
+      showToast('เพิ่มนักร้องแล้ว ✓');
+    } else {
+      showToast('❌ ' + (res.error||'ไม่สำเร็จ'));
+    }
+  } catch(e) {
+    showToast('❌ เชื่อมต่อล้มเหลว: '+e.message);
   }
 }
 
@@ -631,33 +639,57 @@ async function saveEditSinger() {
   const oldFileId= document.getElementById('editOldFileId').value;
   const s        = singers.find(x=>x.id===id);
 
-  let photoUrl = s ? (s.photoUrl||'') : '';
-  let driveFileId = s ? (s.driveFileId||'') : '';
-  let delOldFile = '';
+  showToast('⏳ กำลังบันทึก...');
+
+  const params = new URLSearchParams();
+  params.append('action', 'updateSinger');
+  params.append('id', id);
+  params.append('name', name);
+  params.append('emoji', '🎤');
+  params.append('oldFileId', oldFileId);
 
   if (editPhotoChanged) {
     if (editNewPhotoData) {
+      // อัปโหลดรูปใหม่ — ส่ง base64 ไปพร้อมกัน
       const prog = document.getElementById('editUploadProgress');
       const bar  = document.getElementById('editUploadBar');
-      prog.style.display='block'; bar.style.width='30%';
-      showToast('⏳ กำลังอัปโหลดรูป...');
+      prog.style.display='block'; bar.style.width='50%';
       const base64 = await fileToBase64(editNewPhotoData.file);
-      bar.style.width='70%';
-      const res = await apiPost({ action:'uploadPhoto', base64, filename: editNewPhotoData.filename.replace(/\.[^.]+$/,'.jpg'), mimeType:'image/jpeg', oldFileId });
-      bar.style.width='100%';
-      if (res.success) { photoUrl=res.photoUrl; driveFileId=res.fileId; delOldFile=''; }
+      params.append('imageBase64', base64);
+      params.append('imageName', editNewPhotoData.filename);
+      params.append('imageType', 'image/jpeg');
+      params.append('photoUrl', '');
+      params.append('driveFileId', '');
+      bar.style.width='80%';
     } else if (editNewPhotoUrl) {
-      photoUrl = editNewPhotoUrl; driveFileId=''; delOldFile=oldFileId;
+      params.append('photoUrl', editNewPhotoUrl);
+      params.append('driveFileId', '');
     } else {
-      photoUrl=''; driveFileId=''; delOldFile=oldFileId;
+      // ลบรูป
+      params.append('photoUrl', '');
+      params.append('driveFileId', '');
     }
+  } else {
+    params.append('photoUrl', s ? (s.photoUrl||'') : '');
+    params.append('driveFileId', s ? (s.driveFileId||'') : '');
   }
 
-  await apiGet({ action:'updateSinger', id, name, emoji:'🎤', photoUrl, driveFileId, oldFileId: delOldFile });
-  singers = await apiGet({action:'getSingers'}) || [];
-  renderSingers();
-  closeEditModal();
-  showToast('บันทึกแล้ว ✓');
+  try {
+    const r = await fetch(SCRIPT_URL, { method:'POST', body: params });
+    const text = await r.text();
+    const res = JSON.parse(text);
+    document.getElementById('editUploadProgress').style.display='none';
+    if (res.success) {
+      singers = await apiGet({action:'getSingers'}) || [];
+      renderSingers();
+      closeEditModal();
+      showToast('บันทึกแล้ว ✓');
+    } else {
+      showToast('❌ ' + (res.error||'ไม่สำเร็จ'));
+    }
+  } catch(e) {
+    showToast('❌ เชื่อมต่อล้มเหลว: '+e.message);
+  }
 }
 
 // ---- SONGS ----
