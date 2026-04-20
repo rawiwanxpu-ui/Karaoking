@@ -422,21 +422,21 @@ let editPhotoChanged=false;
 async function apiGet(params) {
   try {
     const r = await fetch(SCRIPT_URL + '?' + new URLSearchParams(params));
-    return await r.json();
+    const text = await r.text();
+    try { return JSON.parse(text); }
+    catch(_) { showToast('Response ผิดพลาด'); return {}; }
   } catch(e) { showToast('เชื่อมต่อล้มเหลว: '+e.message); return {}; }
 }
 
 async function apiPost(body) {
   try {
-    // Apps Script ต้องรับ form-urlencoded ถึงจะผ่าน CORS redirect
-    const form = new URLSearchParams();
-    Object.keys(body).forEach(k => form.append(k, body[k]));
-    const r = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: form.toString()
-    });
-    return await r.json();
+    // ใช้ URLSearchParams เหมือนเว็บกลุ่มเพื่อนภูกระดึง ซึ่งทำงานได้กับ Apps Script จริง
+    const params = new URLSearchParams();
+    Object.keys(body).forEach(k => params.append(k, body[k]));
+    const r = await fetch(SCRIPT_URL, { method:'POST', body: params });
+    const text = await r.text();
+    try { return JSON.parse(text); }
+    catch(_) { showToast('Response ผิดพลาด: '+text.slice(0,100)); return {}; }
   } catch(e) { showToast('เชื่อมต่อล้มเหลว: '+e.message); return {}; }
 }
 
@@ -507,10 +507,15 @@ async function addSinger() {
 
   showToast('⏳ กำลังบันทึก...');
   if (fileEl.files[0]) {
+    showToast('⏳ กำลังอัปโหลดรูป...');
     const base64 = await fileToBase64(fileEl.files[0]);
     const res = await apiPost({ action:'uploadPhoto', base64, filename: fileEl.files[0].name.replace(/\.[^.]+$/,'.jpg'), mimeType: 'image/jpeg' });
-    if (res.success) { photoUrl = res.photoUrl; driveFileId = res.fileId; }
-    else showToast('อัปโหลดรูปไม่สำเร็จ: '+(res.error||''));
+    if (res.success) {
+      photoUrl = res.photoUrl; driveFileId = res.fileId;
+    } else {
+      showToast('❌ อัปโหลดไม่สำเร็จ: ' + (res.error || 'ไม่ทราบสาเหตุ'));
+      return;
+    }
   } else if (urlVal) {
     photoUrl = urlVal;
   }
