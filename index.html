@@ -861,25 +861,63 @@ function autoCorrelate(buf, sr) {
 async function startSinging(withRec=false) {
   try {
     withRecording = withRec;
-    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+
+    // ขอไมค์เสมอ
+    const micStream = await navigator.mediaDevices.getUserMedia({audio:true});
     audioCtx = new (window.AudioContext||window.webkitAudioContext)();
     analyser = audioCtx.createAnalyser(); analyser.fftSize=2048;
-    mic = audioCtx.createMediaStreamSource(stream); mic.connect(analyser);
+
+    // ต่อไมค์เข้า analyser สำหรับ pitch detection
+    mic = audioCtx.createMediaStreamSource(micStream);
+    mic.connect(analyser);
+
     isSinging=true; setWaveIdle(false);
 
-    // อัดเสียงเฉพาะเมื่อเลือก "อัดเสียง + AI"
     if (withRec) {
       audioChunks=[]; recordedBlob=null;
-      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
-      mediaRecorder = new MediaRecorder(stream, {mimeType});
+
+      let recordStream = micStream; // default: ไมค์อย่างเดียว
+
+      // ลองขอ screen capture เพื่อดึงเสียงจาก tab YouTube
+      try {
+        showToast('📺 เลือก tab YouTube แล้วติ๊ก "Share tab audio"');
+        const displayStream = await navigator.mediaDevices.getDisplayMedia({
+          video: true, // ต้องขอ video ด้วย browser ถึงจะยอม
+          audio: true  // เสียงจาก tab
+        });
+
+        // ผสมเสียงไมค์ + เสียงดนตรีเข้าด้วยกัน
+        const dest = audioCtx.createMediaStreamDestination();
+        const micSrc = audioCtx.createMediaStreamSource(micStream);
+        micSrc.connect(dest);
+
+        const displayAudioTracks = displayStream.getAudioTracks();
+        if (displayAudioTracks.length > 0) {
+          const displaySrc = audioCtx.createMediaStreamSource(displayStream);
+          displaySrc.connect(dest);
+          showToast('✅ ผสมเสียงดนตรี + เสียงร้องสำเร็จ');
+        } else {
+          showToast('⚠ ไม่พบเสียงจาก tab — ลืมติ๊ก "Share audio" ไหม?');
+        }
+
+        // หยุด video track ทิ้ง ไม่ต้องการ
+        displayStream.getVideoTracks().forEach(t => t.stop());
+
+        recordStream = dest.stream;
+      } catch(e) {
+        // ถ้ากด cancel หรือไม่รองรับ → อัดแค่ไมค์
+        showToast('⚠ อัดเฉพาะเสียงร้อง (ไม่มีดนตรี)');
+      }
+
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus' : 'audio/webm';
+      mediaRecorder = new MediaRecorder(recordStream, {mimeType});
       mediaRecorder.ondataavailable = e => { if(e.data.size>0) audioChunks.push(e.data); };
       mediaRecorder.onstop = () => {
         recordedBlob = new Blob(audioChunks, {type: mimeType});
-        // แสดง player ฟังเสียง
         const audioEl = document.getElementById('playbackAudio');
         audioEl.src = URL.createObjectURL(recordedBlob);
         document.getElementById('playbackSection').style.display='block';
-        document.getElementById('btnAI').style.display='block';
       };
       mediaRecorder.start(1000);
     }
